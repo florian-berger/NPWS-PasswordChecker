@@ -1,5 +1,8 @@
 # NPWS-PasswordChecker
-This tool uses the SDK of [Netwrix Password Secure](https://www.netwrix.com/enterprise_password_management_software.html) to connect to their service. With this, all passwords accessible by the logged in user are loaded. After they are loaded, the secrets are checked for security, taking the most common risks into account.
+This tool uses the SDK/API of [Netwrix Password Secure](https://www.netwrix.com/enterprise_password_management_software.html) to connect to their service. With this, all passwords accessible by the logged in user are loaded. After they are loaded, the secrets are checked for security, taking the most common risks into account.
+
+> [!NOTE]  
+> The Password Secure SDK/API can only be used for customers with the Enterprise Plus license and MSP customers.
 
 ## Security checks
 ### Quality
