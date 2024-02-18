@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:resources="clr-namespace:PasswordChecker.Resources">
+    <ResourceDictionary.MergedDictionaries>
+        <resources:CachedResourceDictionary Source="XamlImages/ImageCancel.xaml" />
+        <resources:CachedResourceDictionary Source="XamlImages/ImageSave.xaml" />
+        <resources:CachedResourceDictionary Source="XamlImages/ImageSettings.xaml" />
+        <resources:CachedResourceDictionary Source="XamlImages/ImageStart.xaml" />
+        <resources:CachedResourceDictionary Source="XamlImages/ImageWarning.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>
