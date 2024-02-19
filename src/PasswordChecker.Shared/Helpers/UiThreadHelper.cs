@@ -9,7 +9,11 @@
 
         #endregion Private variables
 
-        public UiThreadHelper()
+        #region Public methods
+
+        #region Initialization
+
+        public static void Initialize()
         {
             _uiThreadId = Environment.CurrentManagedThreadId;
 
@@ -17,7 +21,7 @@
             _taskFactory = new TaskFactory(scheduler);
         }
 
-        #region Public methods
+        #endregion Initialization
 
         public static void RunOnUiThread(Action action)
         {

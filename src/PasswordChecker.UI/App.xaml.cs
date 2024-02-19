@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Threading;
+using PasswordChecker.Shared.Helpers;
 using PasswordChecker.UI.Windows;
 
 namespace PasswordChecker.UI
@@ -48,6 +49,8 @@ namespace PasswordChecker.UI
 
             FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement),
                 new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(culture.IetfLanguageTag)));
+
+            Current.Dispatcher.Invoke(UiThreadHelper.Initialize);
 
             new MainWindow().Show();
         }
