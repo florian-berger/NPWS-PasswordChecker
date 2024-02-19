@@ -60,15 +60,6 @@ namespace PasswordChecker.UI.ViewModel
         } private string? _loginUserWelcome;
 
         /// <summary>
-        ///     Description for the current auth step
-        /// </summary>
-        public string? AuthDescription
-        {
-            get => _authDescription;
-            set => SetProperty(ref _authDescription, value);
-        } private string? _authDescription;
-
-        /// <summary>
         ///     Authentication that should be displayed
         /// </summary>
         public FillableAuthentication? DisplayAuthentication
@@ -248,6 +239,10 @@ namespace PasswordChecker.UI.ViewModel
 
                 AnalyzeNextRequirement();
             }
+            catch (Exception ex)
+            {
+                // TODO: Error Handling
+            }
             finally
             {
                 IsWorking = false;
@@ -309,25 +304,22 @@ namespace PasswordChecker.UI.ViewModel
                 else
                 {
                     // We need to display exactly this requirement
-                    var fillableAuth = requirement.PossibleRequirements.First();
+                    DisplayAuthentication = requirement.PossibleRequirements.First();
 
-                    SetAuthTypeDescription(fillableAuth);
-
-                    if (fillableAuth is DynamicFillableAuthentication dynamicAuth)
+                    if (DisplayAuthentication is DynamicFillableAuthentication)
                     {
                         AuthTypeHelper.IsDynamicAuthentication = true;
-                        DisplayAuthentication = dynamicAuth;
                     }
-                    else if (fillableAuth is FillableChangePasswordAuthentication changePasswordAuth)
+                    else if (DisplayAuthentication is FillableChangePasswordAuthentication changePasswordAuth)
                     {
                         _newPasswordPolicy = changePasswordAuth.Policy;
-                        DisplayAuthentication = changePasswordAuth;
                         ValidateNewPassword();
+
                         AuthTypeHelper.IsChangePasswordAuthentication = true;
                     }
                     else
                     {
-                        throw new InvalidOperationException($"The auth type {fillableAuth.AuthType} is not yet implemented.");
+                        throw new InvalidOperationException($"The auth type {DisplayAuthentication.AuthType} is not yet implemented.");
                     }
                 }
             }
@@ -335,11 +327,6 @@ namespace PasswordChecker.UI.ViewModel
             {
                 throw new InvalidOperationException("Didn't get any requirement from the server.");
             }
-        }
-
-        private void SetAuthTypeDescription(FillableAuthentication fillableAuth)
-        {
-            AuthDescription = fillableAuth.AuthType;
         }
 
         private void ValidateNewPassword()
