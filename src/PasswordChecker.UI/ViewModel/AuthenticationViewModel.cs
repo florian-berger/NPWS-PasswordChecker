@@ -74,8 +74,20 @@ namespace PasswordChecker.UI.ViewModel
         public FillableAuthentication? DisplayAuthentication
         {
             get => _displayAuthentication;
-            set => SetProperty(ref _displayAuthentication, value);
+            set
+            {
+                if (SetProperty(ref _displayAuthentication, value))
+                {
+                    RaisePropertyChanged(nameof(DynamicAuthentication));
+                }
+            }
         } private FillableAuthentication? _displayAuthentication;
+
+        /// <summary>
+        ///     Helper property that casts the <see cref="FillableAuthentication" /> to
+        ///     <see cref="DynamicFillableAuthentication" />, just to remove the warnings in the XAML
+        /// </summary>
+        public DynamicFillableAuthentication? DynamicAuthentication => DisplayAuthentication as DynamicFillableAuthentication;
 
         /// <summary>
         ///     New password that should be used for your account
@@ -249,6 +261,11 @@ namespace PasswordChecker.UI.ViewModel
                 throw new InvalidOperationException("Can't continue, no auth flow is set!");
             }
 
+            if (DisplayAuthentication is FillableChangePasswordAuthentication changePasswordAuth)
+            {
+                changePasswordAuth.NewPassword = NewPassword;
+            }
+
             await _authFlow.Authenticate(DisplayAuthentication);
             if (_authFlow.IsAuthenticated)
             {
@@ -257,6 +274,10 @@ namespace PasswordChecker.UI.ViewModel
             else
             {
                 var nextRequirement = _authFlow.GetNextRequirement();
+#if DEBUG
+                nextRequirement?.PossibleRequirements.RemoveAll(r => r is FillablePkiConfiguration);
+#endif
+
                 SetNextRequirement(nextRequirement);
             }
         }
@@ -300,6 +321,7 @@ namespace PasswordChecker.UI.ViewModel
                     else if (fillableAuth is FillableChangePasswordAuthentication changePasswordAuth)
                     {
                         _newPasswordPolicy = changePasswordAuth.Policy;
+                        DisplayAuthentication = changePasswordAuth;
                         ValidateNewPassword();
                         AuthTypeHelper.IsChangePasswordAuthentication = true;
                     }
@@ -346,9 +368,8 @@ namespace PasswordChecker.UI.ViewModel
                 if (!validationResult.IsValid)
                 {
                     PolicyErrorText = string.Join(Environment.NewLine, validationResult.Errors.Select(v => v.ToString()));
+                    return;
                 }
-
-                return;
             }
 
             PolicyErrorText = null;
