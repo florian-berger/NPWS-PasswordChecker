@@ -10,12 +10,12 @@
                  xmlns:apiData="clr-namespace:PsrApi.Internals.AuthFlow.Data;assembly=PsrApi"
                  xmlns:templateSelectors="clr-namespace:PasswordChecker.UI.Wpf.TemplateSelectors"
                  xmlns:converters="clr-namespace:PasswordChecker.UI.Wpf.Converters"
-                 mc:Ignorable="d" Title="Authentication" 
-                 Height="500" Width="300" MaxWidth="300" MaxHeight="500" WindowStyle="ToolWindow" ResizeMode="NoResize"
+                 mc:Ignorable="d" MaxWidth="300" MaxHeight="500"
+                 WindowStyle="ToolWindow" ResizeMode="NoResize"
                  WindowStartupLocation="CenterOwner" ShowHelpButton="False" TitleTextAlignment="Left"
+                 SizeToContent="WidthAndHeight" Title="Authentication"
                  sf:SfSkinManager.Theme="{sf:SkinManager ThemeName=Windows11Dark}"
-                 d:DataContext="{d:DesignInstance viewModel:AuthenticationViewModel}"
-                 SizeToContent="WidthAndHeight">
+                 d:DataContext="{d:DesignInstance viewModel:AuthenticationViewModel}">
     <sf:RibbonWindow.Resources>
         <converters:ImageBytesToImageConverter x:Key="ImageBytesToImageConverter" />
 
