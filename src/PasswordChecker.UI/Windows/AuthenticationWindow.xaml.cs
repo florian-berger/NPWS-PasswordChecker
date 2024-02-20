@@ -1,4 +1,6 @@
-﻿namespace PasswordChecker.UI.Windows
+﻿using System.Windows;
+
+namespace PasswordChecker.UI.Windows
 {
     /// <summary>
     /// Interaction logic for AuthenticationWindow.xaml
@@ -7,6 +9,7 @@
     {
         public AuthenticationWindow()
         {
+            Owner = Application.Current.MainWindow;
             InitializeComponent();
         }
     }

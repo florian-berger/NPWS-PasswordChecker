@@ -1,4 +1,5 @@
-﻿using PasswordChecker.Data;
+﻿using System.Diagnostics;
+using PasswordChecker.Data;
 using Prism.Mvvm;
 
 namespace PasswordChecker
@@ -13,7 +14,7 @@ namespace PasswordChecker
         /// <summary>
         ///     Time when the check was started
         /// </summary>
-        public DateTime StartTime { get; init; }
+        public DateTime StartTime { get; set; }
 
         /// <summary>
         ///     Step that is currently executing
@@ -28,12 +29,19 @@ namespace PasswordChecker
                     RaisePropertyChanged(nameof(StepInt));
                 }
             }
-        } private CheckerStep _step;
+        } private CheckerStep _step = CheckerStep.NotStarted;
 
         /// <summary>
         ///     Integer value representing the current step
         /// </summary>
-        public int StepInt => (int) Step;
+        public int StepInt
+        {
+            get
+            {
+                Trace.WriteLine(Step);
+                return (int)Step;
+            }
+        } 
 
         public bool IsFinished
         {

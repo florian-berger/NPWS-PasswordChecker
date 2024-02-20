@@ -7,7 +7,7 @@
         LoadPasswordsCount = 1,
         LoadPasswords = 2,
         CheckPasswords = 3,
-        CreateReport = 4,
+        PrepareReport = 4,
         Finish = 5
     }
 }

@@ -1,0 +1,242 @@
+﻿<sf:RibbonWindow x:Class="PasswordChecker.UI.Windows.ReportWindow"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:sf="http://schemas.syncfusion.com/wpf"
+                     xmlns:viewModel="clr-namespace:PasswordChecker.UI.ViewModel"
+                     xmlns:wpf="clr-namespace:PasswordChecker.UI.Wpf"
+                     xmlns:converters="clr-namespace:PasswordChecker.UI.Wpf.Converters"
+                     xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+                     mc:Ignorable="d"
+                     sf:SfSkinManager.Theme="{sf:SkinManager ThemeName=Windows11Dark}"
+                     Height="490" Width="800" MinHeight="490" MinWidth="800"
+                     Title="Report" x:Name="WindowInstance"
+                     d:DataContext="{d:DesignInstance viewModel:ReportViewModel}">
+    <sf:RibbonWindow.Resources>
+        <converters:IntegerHigherThanNullToVisibilityConverter x:Key="IntegerHigherThanNullToVisibilityConverter" />
+
+        <sf:ChartColorModel x:Key="QualityColors">
+            <sf:ChartColorModel.CustomBrushes>
+                <SolidColorBrush Color="Red" />
+                <SolidColorBrush Color="Orange" />
+                <SolidColorBrush Color="Green" />
+            </sf:ChartColorModel.CustomBrushes>
+        </sf:ChartColorModel>
+
+        <Style x:Key="BreachedPasswordsGridStyle" TargetType="{x:Type sf:SfDataGrid}">
+            <Setter Property="AllowSorting" Value="True" />
+            <Setter Property="AutoGenerateColumns" Value="True" />
+            <Setter Property="ColumnSizer" Value="Star" />
+            <Setter Property="NavigationMode" Value="Row" />
+            <Setter Property="ShowSortNumbers" Value="True" />
+            <Setter Property="AllowEditing" Value="False" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="5,0,5,5" />
+        </Style>
+    </sf:RibbonWindow.Resources>
+
+    <DockPanel>
+        <sf:Ribbon DockPanel.Dock="Top" EnableSimplifiedLayoutMode="True" LayoutMode="Simplified" VerticalAlignment="Top" BackStage="{x:Null}" RibbonContextMenuOpening="OnRibbonContextMenuOpening"
+                   MinimizeButtonVisibility="Collapsed">
+            <sf:Ribbon.BackStageButton>
+                <sf:BackStageButton Visibility="Collapsed" />
+            </sf:Ribbon.BackStageButton>
+
+            <sf:RibbonTab Caption="Actions" IsChecked="True">
+                <sf:RibbonBar Header="Actions">
+                    <sf:RibbonButton HorizontalAlignment="Left" Label="Save as PDF" SizeForm="Large"
+                                     Command="{Binding Path=SavePdfCommand, Mode=OneTime}"
+                                     CommandParameter="{Binding ElementName=WindowInstance}"
+                                     MediumIcon="{fa:IconSource Save, Foreground=White, IconFont=Solid}" />
+                </sf:RibbonBar>
+            </sf:RibbonTab>
+        </sf:Ribbon>
+
+        <Grid Margin="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- First Box: General information -->
+                <GroupBox Grid.Row="0" Margin="5,0" Header="Info" Padding="5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Checked fields" FontWeight="Bold" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Path=Report.TotalCountOfPasswordFields, Mode=OneWay}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="Skipped fields" FontWeight="Bold" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2" Grid.Row="2" Text="{Binding Path=Report.SkippedCountOfPasswordFields, Mode=OneWay}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+
+                        <TextBlock Grid.Column="0" Grid.Row="4" Text="Count of duplicate passwords" FontWeight="Bold" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2" Grid.Row="4" Text="{Binding Path=Report.DuplicatesCount, Mode=OneWay}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <Image Grid.Column="4" Grid.Row="4" Source="{StaticResource ImageWarning}" Height="16" Width="16" HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Visibility="{Binding Path=Report.DuplicatesCount, Mode=OneWay, Converter={StaticResource IntegerHigherThanNullToVisibilityConverter}}" />
+
+                        <TextBlock Grid.Column="0" Grid.Row="6" Text="Count of breached passwords" FontWeight="Bold" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2" Grid.Row="6" Text="{Binding Path=Report.BreachedPasswords.Count, Mode=OneWay}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <Image Grid.Column="4" Grid.Row="6" Source="{StaticResource ImageWarning}" Height="16" Width="16" HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Visibility="{Binding Path=Report.BreachedPasswords.Count, Mode=OneWay, Converter={StaticResource IntegerHigherThanNullToVisibilityConverter}}" />
+
+                        <TextBlock Grid.Column="0" Grid.Row="8" Text="Errors" FontWeight="Bold" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2" Grid.Row="8" Text="{Binding Path=Report.Errors.Count, Mode=OneWay}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <Image Grid.Column="4" Grid.Row="8" Source="{StaticResource ImageWarning}" Height="16" Width="16" HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Visibility="{Binding Path=Report.Errors.Count, Mode=OneWay, Converter={StaticResource IntegerHigherThanNullToVisibilityConverter}}" />
+                    </Grid>
+                </GroupBox>
+
+                <!-- Second Box: Quality chart -->
+                <GroupBox Grid.Row="1" Margin="5" Header="Quality">
+                    <sf:SfChart Height="200" Width="200" HorizontalAlignment="Center" Initialized="Chart_OnInitialized">
+                        <sf:PieSeries ItemsSource="{Binding Path=ReportQualityChartData}"
+                                      XBindingPath="Item1" YBindingPath="Item2"
+                                      LabelPosition="Inside"
+                                      sf:ChartTooltip.EnableAnimation="True"
+                                      EnableSmartLabels="True"
+                                      Palette="Custom"
+                                      ColorModel="{StaticResource QualityColors}"
+                                      Initialized="Series_OnInitialized">
+                        </sf:PieSeries>
+                    </sf:SfChart>
+                </GroupBox>
+            </Grid>
+
+            <Grid Grid.Column="2">
+                <GroupBox Header="Details" Margin="0" HorizontalAlignment="Stretch">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                            <!-- List of check errors -->
+                            <Expander Margin="0 5 0 10" IsExpanded="False"
+                                      Visibility="{Binding Path=Report.Errors.Count, Mode=OneWay, Converter={StaticResource IntegerHigherThanNullToVisibilityConverter}}">
+                                <Expander.Header>
+                                    <TextBlock Text="Errors" FontWeight="Bold" FontSize="15"
+                                               Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}"/>
+                                </Expander.Header>
+
+                                <ItemsControl ItemsSource="{Binding Path=Report.Errors, Mode=OneWay}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock x:Name="ErrorText" TextWrapping="Wrap" Margin="5 0 0 5">
+                                                <Run Text="{Binding Path=Key, Mode=OneWay}" FontWeight="Bold" />
+                                                <Run Text="{Binding Path=Value, Mode=OneWay}" />
+                                                <!--<Run Text="{Binding Path=Value, Mode=OneWay, Converter={StaticResource ExceptionTextConverter}}" />-->
+                                            </TextBlock>
+
+                                            <DataTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+                                                    <Setter TargetName="ErrorText" Property="Margin" Value="5 5 0 5" />
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Expander>
+
+                            <!-- List of duplicate passwords -->
+                            <Expander Margin="0 5 0 10" HorizontalAlignment="Stretch" IsExpanded="True"
+                                      Visibility="{Binding Path=Report.Duplicates.Length, Mode=OneWay, Converter={StaticResource IntegerHigherThanNullToVisibilityConverter}}">
+                                <Expander.Header>
+                                    <TextBlock Text="Duplicates" FontWeight="Bold" FontSize="15"
+                                               Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}"/>
+                                </Expander.Header>
+
+                                <StackPanel Orientation="Vertical" Margin="5">
+                                    <ItemsControl ItemsSource="{Binding Path=Report.Duplicates, Mode=OneWay}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel x:Name="SubPanel" Orientation="Vertical" Margin="0 10 0 0">
+                                                    <TextBlock FontWeight="Bold" Text="{Binding Path=Count, Mode=OneWay}" />
+                                                    <!--<TextBlock FontWeight="Bold" Text="{Binding Path=Count, Mode=OneWay, StringFormat={x:Static lang:ReportResource.DuplicateFindings}}" />-->
+
+                                                    <ItemsControl ItemsSource="{Binding Path=., Mode=OneWay}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock Margin="0 3 0 0">
+                                                                    <Run Text=" *" />
+                                                                    <Run Text="{Binding Path=., Mode=OneWay}" />
+                                                                </TextBlock>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+
+                                                <DataTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+                                                        <Setter TargetName="SubPanel" Property="Margin" Value="0 0 0 0" />
+                                                    </DataTrigger>
+                                                </DataTemplate.Triggers>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Expander>
+
+                            <!-- List of breached passwords -->
+                            <Expander IsExpanded="True" HorizontalAlignment="Stretch"
+                              Visibility="{Binding Path=Report.BreachedPasswords.Count, Mode=OneWay, Converter={StaticResource IntegerHigherThanNullToVisibilityConverter}}">
+                                <Expander.Header>
+                                    <TextBlock Text="Breached" FontWeight="Bold" FontSize="15"
+                                               Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}"/>
+                                </Expander.Header>
+
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Margin="5" TextWrapping="Wrap">
+                                        <Run Text="Here you can find a list of all passwords that were breached with the number of breaches. The information is loaded from" />
+                                        <Hyperlink Command="{x:Static wpf:StaticCommands.OpenUriCommand}" CommandParameter="https://haveibeenpwned.com">
+                                            <TextBlock Text="Have I Been Pwned" Foreground="LightBlue" FontWeight="Bold" />
+                                        </Hyperlink>
+                                        <Run Text="- the check was executed by passing the first bytes of the hash of the password. The rest of the check was executed locally. No passwords were transmitted in clear text!" />
+                                    </TextBlock>
+
+                                    <sf:SfDataGrid ItemsSource="{Binding Path=Report.BreachedPasswords}" Style="{StaticResource BreachedPasswordsGridStyle}">
+                                        <sf:SfDataGrid.Columns>
+                                            <sf:GridTextColumn HeaderText="Password identifier" MappingName="Identifier"
+                                                               TextTrimming="CharacterEllipsis"  HorizontalHeaderContentAlignment="Left"/>
+                                            <sf:GridNumericColumn HeaderText="Number of breaches" MappingName="Count"
+                                                                  TextAlignment="Right" NumberDecimalDigits="0"
+                                                                  NumberGroupSeparator="." NumberGroupSizes="3"
+                                                                  TextTrimming="CharacterEllipsis"
+                                                                  HorizontalHeaderContentAlignment="Right" />
+                                        </sf:SfDataGrid.Columns>
+
+                                        <sf:SfDataGrid.SortColumnDescriptions>
+                                            <sf:SortColumnDescription ColumnName="Count" SortDirection="Descending" />
+                                        </sf:SfDataGrid.SortColumnDescriptions>
+                                    </sf:SfDataGrid>
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </ScrollViewer>
+                </GroupBox>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</sf:RibbonWindow>

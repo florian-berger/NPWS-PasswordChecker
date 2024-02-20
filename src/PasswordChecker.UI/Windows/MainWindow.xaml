@@ -14,6 +14,11 @@
         <viewModel:MainViewModel />
     </sf:RibbonWindow.DataContext>
 
+    <sf:RibbonWindow.Resources>
+        <DataTemplate x:Key="FixTemplateSelector">
+        </DataTemplate>
+    </sf:RibbonWindow.Resources>
+
     <DockPanel>
         <sf:Ribbon x:Name="WindowRibbon" DockPanel.Dock="Top" VerticalAlignment="Top" MinimizeButtonVisibility="Collapsed"
                    EnableSimplifiedLayoutMode="False" LayoutMode="Normal" BackStage="{x:Null}" RibbonState="Normal"
@@ -58,11 +63,11 @@
                 <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">
                     <Run Text="Please enter your access information to" />
                     <Hyperlink Command="{x:Static wpf:StaticCommands.OpenUriCommand}" CommandParameter="https://www.netwrix.com/enterprise_password_management_software.html">
-                        <TextBlock Text="Netwrix Password Secure" FontWeight="Bold" />
+                        <TextBlock Text="Netwrix Password Secure" FontWeight="Bold" Foreground="LightBlue" />
                     </Hyperlink>
                     <Run Text="to start the analysis of your saved passwords. The software is checking for duplicates, weak quality and the well known" />
                     <Hyperlink Command="{x:Static wpf:StaticCommands.OpenUriCommand}" CommandParameter="https://haveibeenpwned.com">
-                        <TextBlock Text="Have I Been Pwned" FontWeight="Bold" />
+                        <TextBlock Text="Have I Been Pwned" FontWeight="Bold" Foreground="LightBlue" />
                     </Hyperlink>
                     <Run Text="service. No data is transferred or stored in any way. At the end, a report of all findings is generated." />
                 </TextBlock>
@@ -81,6 +86,35 @@
                     <TextBox Text="{Binding Path=LoginUserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </sf:SfTextInputLayout>
             </StackPanel>
+
+            <Grid Visibility="{Binding Path=IsCheckRunning, Mode=OneWay, Converter={StaticResource BoolVisibilityConverter}}">
+                <!-- ReSharper disable Xaml.PossibleNullReferenceException -->
+                <sf:SfStepProgressBar Grid.Column="0" AnimationDuration="0:0:0.4" Margin="0 10 10 0"
+                                      Orientation="Vertical" ItemsStretch="Fill" MinimumItemSpacing="10" ConnectorThickness="5"
+                                      SecondaryContentTemplate="{StaticResource FixTemplateSelector}"
+                                      SelectedIndex="{Binding Path=CurrentProgress.StepInt, Mode=OneWay}">
+                    
+                    <sf:SfStepProgressBar.Style>
+                        <Style TargetType="{x:Type sf:SfStepProgressBar}">
+                            <Setter Property="SelectedItemStatus" Value="Indeterminate" />
+
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=CurrentProgress.IsFinished}" Value="True">
+                                    <Setter Property="SelectedItemStatus" Value="Active" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </sf:SfStepProgressBar.Style>
+
+                    <sf:StepViewItem Content="Establish connection" />
+                    <sf:StepViewItem Content="Count passwords" />
+                    <sf:StepViewItem Content="Load passwords" />
+                    <sf:StepViewItem Content="Check passwords" />
+                    <sf:StepViewItem Content="Prepare report" />
+                    <sf:StepViewItem Content="Finalize" />
+                </sf:SfStepProgressBar>
+                <!-- ReSharper restore Xaml.PossibleNullReferenceException -->
+            </Grid>
         </Grid>
     </DockPanel>
 </sf:RibbonWindow>

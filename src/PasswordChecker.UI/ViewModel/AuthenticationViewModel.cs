@@ -186,10 +186,7 @@ namespace PasswordChecker.UI.ViewModel
         /// <returns>Instance of the PsrApi if the authentication succeeded. Otherwise null</returns>
         public static PsrApi.PsrApi? InitializeAuthentication(string serverAddress, string databaseName, string userName)
         {
-            var window = new AuthenticationWindow
-            {
-                Owner = Application.Current.MainWindow
-            };
+            var window = new AuthenticationWindow();
 
             var viewModelInstance = new AuthenticationViewModel(serverAddress, databaseName, userName, window);
             window.DataContext = viewModelInstance;

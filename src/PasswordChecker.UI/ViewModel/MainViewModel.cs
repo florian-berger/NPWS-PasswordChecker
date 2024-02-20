@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using PasswordChecker.Data;
 using PasswordChecker.Shared.Configuration;
+using PasswordChecker.UI.Windows;
 using Prism.Commands;
 using Prism.Mvvm;
 using PsrApi;
@@ -12,6 +15,12 @@ namespace PasswordChecker.UI.ViewModel
     /// </summary>
     internal class MainViewModel : BindableBase
     {
+        #region Private variables
+
+        private CancellationTokenSource? _cancelTokenSrc;
+
+        #endregion Private variables
+
         #region Properties
 
         /// <summary>
@@ -74,6 +83,12 @@ namespace PasswordChecker.UI.ViewModel
             } 
         } private string _loginUserName = string.Empty;
 
+        public CheckerProgress? CurrentProgress
+        {
+            get => _currentProgress;
+            private set => SetProperty(ref _currentProgress, value);
+        } private CheckerProgress? _currentProgress;
+
         #endregion Properties
 
         #region Constructor
@@ -108,35 +123,15 @@ namespace PasswordChecker.UI.ViewModel
 
         #region Private methods
 
-        private async void Run()
+        private void Run()
         {
-            try
+            if (IsCheckRunning)
             {
-                IsCheckRunning = true;
+                // Check is already running, can't run parallel
+                return;
+            }
 
-                _ = SaveLastUserData();
-                var api = AuthenticationViewModel.InitializeAuthentication(LoginServerAddress, LoginDatabaseName, LoginUserName);
-
-                if (api is { SessionState: PsrSessionState.Connected })
-                {
-                    try
-                    {
-                        await RunPasswordAnalysis(api);
-                    }
-                    finally
-                    {
-                        await api.AuthenticationManagerV2.Logout();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // TODO
-            }
-            finally
-            {
-                IsCheckRunning = false;
-            }
+            _ = RunAsync();
         }
 
         private bool CanRun()
@@ -149,7 +144,13 @@ namespace PasswordChecker.UI.ViewModel
 
         private void Cancel()
         {
-            IsCheckRunning = false;
+            if (!CancelCommand.CanExecute())
+            {
+                Console.WriteLine(@"Check is not running - cancel!");
+                return;
+            }
+
+            _cancelTokenSrc?.Cancel();
         }
 
         private bool CanCancel()
@@ -161,6 +162,52 @@ namespace PasswordChecker.UI.ViewModel
         {
             RunCommand.RaiseCanExecuteChanged();
             CancelCommand.RaiseCanExecuteChanged();
+        }
+
+        private async Task RunAsync()
+        {
+            ReportData? reportData;
+
+            try
+            {
+                IsCheckRunning = true;
+
+                await SaveLastUserData();
+
+                CurrentProgress = new CheckerProgress
+                {
+                    Step = CheckerStep.ConnectAndLogin
+                };
+
+                var api = AuthenticationViewModel.InitializeAuthentication(LoginServerAddress, LoginDatabaseName, LoginUserName);
+
+                if (api is { SessionState: PsrSessionState.Connected })
+                {
+                    try
+                    {
+                        await RunPasswordAnalysis(api);
+                    }
+                    finally
+                    {
+                        CurrentProgress.Step = CheckerStep.Finish;
+                        await api.AuthenticationManagerV2.Logout();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // TODO: Error Handling
+            }
+            finally
+            {
+                reportData = CurrentProgress?.Report;
+                ResetExecution();
+            }
+
+            if (reportData != null)
+            {
+                ShowCheckerReport(reportData);
+            }
         }
 
         private async Task SaveLastUserData()
@@ -175,7 +222,30 @@ namespace PasswordChecker.UI.ViewModel
 
         private async Task RunPasswordAnalysis(PsrApi.PsrApi apiInstance)
         {
-            await Task.Delay(2000);
+            if (CurrentProgress == null)
+            {
+                throw new NullReferenceException("No progress is set!");
+            }
+
+            _cancelTokenSrc = new CancellationTokenSource();
+
+            var ignoredFields = App.Configuration.IgnoredFieldNames ?? [];
+            var checker = new Checker(apiInstance, CurrentProgress, ignoredFields,
+                new ConnectionInfo(LoginServerAddress, LoginDatabaseName), _cancelTokenSrc.Token);
+
+            await checker.Run();
+        }
+
+        private void ResetExecution()
+        {
+            IsCheckRunning = false;
+            CurrentProgress = null;
+            CancelCommand.Execute();
+        }
+
+        private void ShowCheckerReport(ReportData data)
+        {
+            new ReportWindow(data).ShowDialog();
         }
 
         #endregion Private methods

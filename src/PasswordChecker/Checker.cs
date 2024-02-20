@@ -6,7 +6,6 @@ using PsrApi.Data;
 using PsrApi.Data.Enums;
 using PasswordChecker.Helpers;
 using PasswordChecker.ServiceConnections;
-using PasswordChecker.Shared.Configuration;
 
 namespace PasswordChecker
 {
@@ -28,7 +27,7 @@ namespace PasswordChecker
 
         private readonly PsrApi.PsrApi _api;
         private readonly CheckerProgress _progress;
-        private readonly CheckerConfig _config;
+        private List<string> _ignoredFieldNames;
         private readonly ConnectionInfo _connectionInfo;
         private readonly CancellationToken _cancellationToken;
 
@@ -46,11 +45,10 @@ namespace PasswordChecker
 
         #region Constructor
 
-        public Checker(PsrApi.PsrApi api, CheckerProgress progress, CheckerConfig config, ConnectionInfo connectionInfo, CancellationToken cancellationToken)
+        public Checker(PsrApi.PsrApi api, CheckerProgress progress, List<string> ignoredFieldNames, ConnectionInfo connectionInfo, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(api);
             ArgumentNullException.ThrowIfNull(progress);
-            ArgumentNullException.ThrowIfNull(config);
             ArgumentNullException.ThrowIfNull(connectionInfo);
             ArgumentNullException.ThrowIfNull(cancellationToken);
 
@@ -61,7 +59,7 @@ namespace PasswordChecker
 
             _api = api;
             _progress = progress;
-            _config = config;
+            _ignoredFieldNames = ignoredFieldNames;
             _connectionInfo = connectionInfo;
             _cancellationToken = cancellationToken;
 
@@ -78,6 +76,7 @@ namespace PasswordChecker
 
         public async Task Run()
         {
+            _progress.StartTime = DateTime.Now;
             ThrowExceptionIfShouldCancel();
 
             UiThreadHelper.RunOnUiThread(() => _progress.Step = CheckerStep.LoadPasswordsCount);
@@ -107,12 +106,11 @@ namespace PasswordChecker
 
             ThrowExceptionIfShouldCancel();
 
-            UiThreadHelper.RunOnUiThread(() => _progress.Step = CheckerStep.CreateReport);
+            UiThreadHelper.RunOnUiThread(() => _progress.Step = CheckerStep.PrepareReport);
             _progress.Report = await SummarizeReportData();
 
             UiThreadHelper.RunOnUiThread(() =>
             {
-                _progress.Step = CheckerStep.Finish;
                 _progress.IsFinished = true;
             });
         }
@@ -153,8 +151,6 @@ namespace PasswordChecker
 
         private async Task AnalyzePasswords(List<PsrContainer> passwords)
         {
-            var ignoredFields = _config.IgnoredFieldNames ?? [];
-
             foreach (var password in passwords)
             {
                 ThrowExceptionIfShouldCancel();
@@ -170,7 +166,7 @@ namespace PasswordChecker
                     ThrowExceptionIfShouldCancel();
 
                     var skip = false;
-                    foreach (var ignore in ignoredFields)
+                    foreach (var ignore in _ignoredFieldNames)
                     {
                         try
                         {
