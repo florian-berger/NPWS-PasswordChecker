@@ -8,7 +8,6 @@ using PasswordChecker.UI.Windows;
 using PasswordChecker.UI.Wpf.BindingObjects;
 using Prism.Commands;
 using Prism.Mvvm;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace PasswordChecker.UI.ViewModel
 {

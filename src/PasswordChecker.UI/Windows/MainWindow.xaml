@@ -7,8 +7,10 @@
                  xmlns:viewModel="clr-namespace:PasswordChecker.UI.ViewModel"
                  xmlns:wpf="clr-namespace:PasswordChecker.UI.Wpf"
                  xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+                 xmlns:lang="clr-namespace:PasswordChecker.Resources.Language;assembly=PasswordChecker.Resources"
+                 xmlns:ui="clr-namespace:PasswordChecker.UI"
                  sf:SfSkinManager.Theme="{sf:SkinManager ThemeName=Windows11Dark}"
-                 mc:Ignorable="d" Title="MainWindow" ShowHelpButton="False"
+                 mc:Ignorable="d" Title="{x:Static lang:MainResource.WindowTitle}" ShowHelpButton="False"
                  Height="480" Width="600" ResizeMode="NoResize">
     <sf:RibbonWindow.DataContext>
         <viewModel:MainViewModel />
@@ -27,63 +29,63 @@
                 <sf:BackStageButton Visibility="Collapsed" />
             </sf:Ribbon.BackStageButton>
 
-            <sf:RibbonTab Caption="Home" IsChecked="True">
-                <sf:RibbonBar Header="Actions" IsLauncherButtonVisible="False">
+            <sf:RibbonTab Caption="{x:Static lang:GlobalResource.Home}" IsChecked="True">
+                <sf:RibbonBar Header="{x:Static lang:GlobalResource.Actions}" IsLauncherButtonVisible="False">
                     <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Large"
-                                     Label="Run"
+                                     Label="{x:Static lang:MainResource.ExecuteCheck}"
                                      Command="{Binding Path=RunCommand, Mode=OneTime}"
                                      LargeIcon="{fa:IconSource PlayCircle, Foreground=White, IconFont=Solid}" />
 
                     <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Small"
-                                     Label="Cancel"
+                                     Label="{x:Static lang:GlobalResource.Cancel}"
                                      Command="{Binding Path=CancelCommand, Mode=OneTime}"
                                      SmallIcon="{fa:IconSource Cancel, Foreground=White, IconFont=Solid}" />
                 </sf:RibbonBar>
 
-                <sf:RibbonBar Header="Extras" IsLauncherButtonVisible="False">
+                <sf:RibbonBar Header="{x:Static lang:GlobalResource.Extras}" IsLauncherButtonVisible="False">
                     <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Large"
-                                     Label="Settings"
+                                     Label="{x:Static lang:MainResource.Settings}"
                                      Command="{Binding Path=SettingsCommand, Mode=OneTime}"
                                      LargeIcon="{fa:IconSource Gears, Foreground=White, IconFont=Solid}" />
 
                     <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Small"
-                                     Label="Open repository"
+                                     Label="{x:Static lang:GlobalResource.OpenRepository}"
                                      SmallIcon="{fa:IconSource Github, Foreground=White, IconFont=Brands}"
                                      Command="{x:Static wpf:StaticCommands.OpenUriCommand}"
-                                     CommandParameter="https://github.com/florian-berger/NPWS-PasswordChecker" />
+                                     CommandParameter="{x:Static ui:CheckerConstants.RepositoryUri}" />
 
                     <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Small"
-                                     Label="Third-party licenses"
+                                     Label="{x:Static lang:GlobalResource.ThirdPartyLicenses}"
                                      SmallIcon="{fa:IconSource Stamp, Foreground=White, IconFont=Solid}" />
                 </sf:RibbonBar>
             </sf:RibbonTab>
         </sf:Ribbon>
 
-        <Grid Margin="12">
+        <Grid Margin="12,5,12,12">
             <StackPanel Visibility="{Binding Path=IsCheckRunning, Mode=OneWay, Converter={StaticResource BoolVisibilityInverseConverter}}">
                 <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">
-                    <Run Text="Please enter your access information to" />
-                    <Hyperlink Command="{x:Static wpf:StaticCommands.OpenUriCommand}" CommandParameter="https://www.netwrix.com/enterprise_password_management_software.html">
-                        <TextBlock Text="Netwrix Password Secure" FontWeight="Bold" Foreground="LightBlue" />
+                    <Run Text="{x:Static lang:MainResource.Description1}" />
+                    <Hyperlink Command="{x:Static wpf:StaticCommands.OpenUriCommand}" CommandParameter="{x:Static ui:CheckerConstants.PasswordSecureWebsite}">
+                        <TextBlock Text="{x:Static lang:GlobalResource.NetwrixPasswordSecure}" FontWeight="Bold" Foreground="LightBlue" />
                     </Hyperlink>
-                    <Run Text="to start the analysis of your saved passwords. The software is checking for duplicates, weak quality and the well known" />
-                    <Hyperlink Command="{x:Static wpf:StaticCommands.OpenUriCommand}" CommandParameter="https://haveibeenpwned.com">
-                        <TextBlock Text="Have I Been Pwned" FontWeight="Bold" Foreground="LightBlue" />
+                    <Run Text="{x:Static lang:MainResource.Description2}" />
+                    <Hyperlink Command="{x:Static wpf:StaticCommands.OpenUriCommand}" CommandParameter="{x:Static ui:CheckerConstants.HaveIBeenPwnedUri}">
+                        <TextBlock Text="{x:Static lang:GlobalResource.HaveIBeenPwned}" FontWeight="Bold" Foreground="LightBlue" />
                     </Hyperlink>
-                    <Run Text="service. No data is transferred or stored in any way. At the end, a report of all findings is generated." />
+                    <Run Text="{x:Static lang:MainResource.Description3}" />
                 </TextBlock>
 
-                <TextBlock Text="Enter your logon data and press the 'Run' button." Margin="0,0,0,15" />
+                <TextBlock Text="{x:Static lang:MainResource.EnterLogonData}" Margin="0,0,0,15" />
 
-                <sf:SfTextInputLayout ContainerType="Filled" Hint="Server address (WebClient URL)">
+                <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:MainResource.ServerAddress}">
                     <TextBox Text="{Binding Path=LoginServerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout ContainerType="Filled" Hint="Database">
+                <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:MainResource.DatabaseName}">
                     <TextBox Text="{Binding Path=LoginDatabaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout ContainerType="Filled" Hint="Username">
+                <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:MainResource.UserName}">
                     <TextBox Text="{Binding Path=LoginUserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </sf:SfTextInputLayout>
             </StackPanel>
@@ -107,12 +109,12 @@
                         </Style>
                     </sf:SfStepProgressBar.Style>
 
-                    <sf:StepViewItem Content="Establish connection" />
-                    <sf:StepViewItem Content="Count passwords" />
-                    <sf:StepViewItem Content="Load passwords" />
-                    <sf:StepViewItem Content="Check passwords" />
-                    <sf:StepViewItem Content="Prepare report" />
-                    <sf:StepViewItem Content="Finalize" />
+                    <sf:StepViewItem Content="{x:Static lang:MainResource.StepEstablishConnection}" />
+                    <sf:StepViewItem Content="{x:Static lang:MainResource.StepCountPasswords}" />
+                    <sf:StepViewItem Content="{x:Static lang:MainResource.StepLoadPasswords}" />
+                    <sf:StepViewItem Content="{x:Static lang:MainResource.StepCheckPasswords}" />
+                    <sf:StepViewItem Content="{x:Static lang:MainResource.StepPrepareReport}" />
+                    <sf:StepViewItem Content="{x:Static lang:MainResource.StepFinish}" />
                 </sf:SfStepProgressBar>
                 <!-- ReSharper restore Xaml.PossibleNullReferenceException -->
             </Grid>

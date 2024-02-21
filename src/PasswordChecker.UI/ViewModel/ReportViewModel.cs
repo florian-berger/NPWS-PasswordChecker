@@ -7,6 +7,7 @@ using System.Windows;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
 using PasswordChecker.Data;
+using PasswordChecker.Resources.Language;
 using Prism.Commands;
 using Prism.Mvvm;
 using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
@@ -42,7 +43,7 @@ namespace PasswordChecker.UI.ViewModel
             {
                 Filter = "Portable Document Format (*.pdf)|*.pdf",
                 FileName = "",
-                Title = "Select export file",
+                Title = ReportResource.SelectExportFile,
                 ValidateNames = true,
                 OverwritePrompt = true,
                 AddExtension = true,
@@ -79,7 +80,7 @@ namespace PasswordChecker.UI.ViewModel
                 // TODO: Error Handling
             }
 
-            var result = MessageBox.Show(windowInstance, "The report was exported successfully. Do you want to open the file?", "Successfully saved",
+            var result = MessageBox.Show(windowInstance, ReportResource.ReportExportSucceeded, ReportResource.SuccessfullySaved,
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
@@ -91,9 +92,9 @@ namespace PasswordChecker.UI.ViewModel
         {
             return
             [
-                new Tuple<string, int>("Weak", Report.Quality.WeakPasswords.Count),
-                new Tuple<string, int>("Good", Report.Quality.GoodPasswords.Count),
-                new Tuple<string, int>("Strong", Report.Quality.StrongPasswords.Count)
+                new Tuple<string, int>(ReportResource.QualityWeak, Report.Quality.WeakPasswords.Count),
+                new Tuple<string, int>(ReportResource.QualityGood, Report.Quality.GoodPasswords.Count),
+                new Tuple<string, int>(ReportResource.QualityStrong, Report.Quality.StrongPasswords.Count)
             ];
         }
 

@@ -10,17 +10,18 @@
                  xmlns:apiData="clr-namespace:PsrApi.Internals.AuthFlow.Data;assembly=PsrApi"
                  xmlns:templateSelectors="clr-namespace:PasswordChecker.UI.Wpf.TemplateSelectors"
                  xmlns:converters="clr-namespace:PasswordChecker.UI.Wpf.Converters"
+                 xmlns:lang="clr-namespace:PasswordChecker.Resources.Language;assembly=PasswordChecker.Resources"
                  mc:Ignorable="d" MaxWidth="300" MaxHeight="500"
                  WindowStyle="ToolWindow" ResizeMode="NoResize"
                  WindowStartupLocation="CenterOwner" ShowHelpButton="False" TitleTextAlignment="Left"
-                 SizeToContent="WidthAndHeight" Title="Authentication"
+                 SizeToContent="WidthAndHeight" Title="{x:Static lang:AuthenticationResource.WindowTitle}"
                  sf:SfSkinManager.Theme="{sf:SkinManager ThemeName=Windows11Dark}"
                  d:DataContext="{d:DesignInstance viewModel:AuthenticationViewModel}">
     <sf:RibbonWindow.Resources>
         <converters:ImageBytesToImageConverter x:Key="ImageBytesToImageConverter" />
 
         <DataTemplate x:Key="PasswordFieldRequirementTemplate" DataType="{x:Type apiData:AuthenticationField}">
-            <sf:SfTextInputLayout ContainerType="Filled" Hint="Password">
+            <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:AuthenticationResource.FieldTypePassword}">
                 <PasswordBox
                     controlHelpers:PasswordBoxHelper.Attach="True"
                     controlHelpers:PasswordBoxHelper.Password="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -28,7 +29,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="PinFieldRequirementTemplate" DataType="{x:Type apiData:AuthenticationField}">
-            <sf:SfTextInputLayout ContainerType="Filled" Hint="PIN">
+            <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:AuthenticationResource.FieldTypePin}">
                 <PasswordBox
                     controlHelpers:PasswordBoxHelper.Attach="True"
                     controlHelpers:PasswordBoxHelper.Password="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -36,19 +37,19 @@
         </DataTemplate>
 
         <DataTemplate x:Key="TokenFieldRequirementTemplate" DataType="{x:Type apiData:AuthenticationField}">
-            <sf:SfTextInputLayout ContainerType="Filled" Hint="Token">
+            <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:AuthenticationResource.FieldTypeToken}">
                 <TextBox Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </sf:SfTextInputLayout>
         </DataTemplate>
 
         <DataTemplate x:Key="UsernameRequirementTemplate" DataType="{x:Type apiData:AuthenticationField}">
-            <sf:SfTextInputLayout ContainerType="Filled" Hint="Username">
+            <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:AuthenticationResource.FieldTypeTokenUsername}">
                 <TextBox Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </sf:SfTextInputLayout>
         </DataTemplate>
 
         <DataTemplate x:Key="TokenUsernameRequirementTemplate" DataType="{x:Type apiData:AuthenticationField}">
-            <sf:SfTextInputLayout ContainerType="Filled" Hint="Username for token">
+            <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:AuthenticationResource.FieldTypeTokenUsername}">
                 <TextBox Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </sf:SfTextInputLayout>
         </DataTemplate>
@@ -58,7 +59,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="FieldTypeNotSupportedTemplate" DataType="{x:Type apiData:AuthenticationField}">
-            <TextBlock Text="Sorry, the requested field type is not supported by the Password Checker. You cannot log in at the moment. Please create an issue in the GitHub repository."
+            <TextBlock Text="{x:Static lang:AuthenticationResource.FieldTypeNotSupported}"
                        TextWrapping="Wrap" Foreground="IndianRed" Margin="0,0,0,15" />
         </DataTemplate>
 
@@ -80,11 +81,11 @@
 
     <Grid>
         <DockPanel Margin="12,-20,12,12" Visibility="{Binding Path=IsWorking, Mode=OneWay, Converter={StaticResource BoolVisibilityInverseConverter}}">
-            <Button DockPanel.Dock="Bottom" Command="{Binding Path=CancelCommand, Mode=OneTime}" Padding="8" Content="Cancel" HorizontalAlignment="Stretch" />
-            <Button DockPanel.Dock="Bottom" Command="{Binding Path=ConfirmCommand, Mode=OneTime}" Padding="8" Content="Confirm" HorizontalAlignment="Stretch" Margin="0,0,0,10" />
+            <Button DockPanel.Dock="Bottom" Command="{Binding Path=CancelCommand, Mode=OneTime}" Padding="8" Content="{x:Static lang:GlobalResource.Cancel}" HorizontalAlignment="Stretch" />
+            <Button DockPanel.Dock="Bottom" Command="{Binding Path=ConfirmCommand, Mode=OneTime}" Padding="8" Content="{x:Static lang:GlobalResource.Confirm}" HorizontalAlignment="Stretch" Margin="0,0,0,10" />
 
             <StackPanel Orientation="Vertical" Margin="0,12,0,0">
-                <TextBlock Text="Welcome" FontWeight="Bold" FontSize="24" HorizontalAlignment="Center" />
+                <TextBlock Text="{x:Static lang:AuthenticationResource.Welcome}" FontWeight="Bold" FontSize="24" HorizontalAlignment="Center" />
                 <TextBlock Text="{Binding Path=LoginUserWelcome, Mode=OneWay}" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" Margin="0,5,0,10" />
 
                 <StackPanel Visibility="{Binding Path=AuthTypeHelper.IsDynamicAuthentication, Mode=OneWay, Converter={StaticResource BoolVisibilityConverter}}">
@@ -100,13 +101,13 @@
                 </StackPanel>
 
                 <StackPanel Visibility="{Binding Path=AuthTypeHelper.IsChangePasswordAuthentication, Mode=OneWay, Converter={StaticResource BoolVisibilityConverter}}">
-                    <sf:SfTextInputLayout ContainerType="Filled" Hint="New password">
+                    <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:AuthenticationResource.NewPassword}">
                         <PasswordBox
                             controlHelpers:PasswordBoxHelper.Attach="True"
                             controlHelpers:PasswordBoxHelper.Password="{Binding Path=NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </sf:SfTextInputLayout>
 
-                    <sf:SfTextInputLayout ContainerType="Filled" Hint="New password (repetition)">
+                    <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:AuthenticationResource.NewPasswordRepetition}">
                         <PasswordBox
                             controlHelpers:PasswordBoxHelper.Attach="True"
                             controlHelpers:PasswordBoxHelper.Password="{Binding Path=NewPasswordRepetition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -120,7 +121,7 @@
 
         <Grid x:Name="IsWorkingIndicator" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20"
               Visibility="{Binding Path=IsWorking, Mode=OneWay, Converter={StaticResource BoolVisibilityConverter}}">
-            <sf:SfBusyIndicator IsBusy="{Binding Path=IsWorking, Mode=OneWay}" AnimationType="DotCircle" ViewboxHeight="128" ViewboxWidth="128" Header="Please wait" />
+            <sf:SfBusyIndicator IsBusy="{Binding Path=IsWorking, Mode=OneWay}" AnimationType="DotCircle" ViewboxHeight="128" ViewboxWidth="128" Header="{x:Static lang:AuthenticationResource.PleaseWait}" />
         </Grid>
     </Grid>
 </sf:RibbonWindow>

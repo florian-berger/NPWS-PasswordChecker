@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace PasswordChecker.UI.Windows
 {
@@ -9,6 +10,7 @@ namespace PasswordChecker.UI.Windows
     {
         public SettingsWindow()
         {
+            Owner = Application.Current.MainWindow;
             InitializeComponent();
         }
 

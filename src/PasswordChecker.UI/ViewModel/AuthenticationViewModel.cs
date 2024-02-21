@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
+using PasswordChecker.Resources.Language;
 using PasswordChecker.Shared.Helpers;
 using PasswordChecker.UI.BindingObjects;
 using PasswordChecker.UI.Windows;
@@ -330,19 +331,19 @@ namespace PasswordChecker.UI.ViewModel
         {
             if (string.IsNullOrWhiteSpace(NewPassword))
             {
-                PolicyErrorText = "New password must not be empty";
+                PolicyErrorText = AuthenticationResource.ChangePasswordNoPassword;
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(NewPasswordRepetition))
             {
-                PolicyErrorText = "Please repeat your new password";
+                PolicyErrorText = AuthenticationResource.ChangePasswordRepeatPassword;
                 return;
             }
 
             if (!NewPassword.Equals(NewPasswordRepetition))
             {
-                PolicyErrorText = "Repetition of the password is not correct";
+                PolicyErrorText = AuthenticationResource.NewPasswordRepetitionNotCorrect;
                 return;
             }
 
