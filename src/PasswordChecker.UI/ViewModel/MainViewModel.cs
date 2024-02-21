@@ -119,6 +119,12 @@ namespace PasswordChecker.UI.ViewModel
         public DelegateCommand CancelCommand => _cancelCommand ??= new DelegateCommand(Cancel, CanCancel);
         private DelegateCommand? _cancelCommand;
 
+        /// <summary>
+        ///     Command to open the settings
+        /// </summary>
+        public DelegateCommand SettingsCommand => _settingsCommand ??= new DelegateCommand(Settings);
+        private DelegateCommand? _settingsCommand;
+
         #endregion Commands
 
         #region Private methods
@@ -156,6 +162,11 @@ namespace PasswordChecker.UI.ViewModel
         private bool CanCancel()
         {
             return IsCheckRunning;
+        }
+
+        private void Settings()
+        {
+            SettingsViewModel.OpenSettingsWindow();
         }
 
         private void UpdateCommandsCanExecute()

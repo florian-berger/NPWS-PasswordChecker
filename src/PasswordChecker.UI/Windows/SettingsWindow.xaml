@@ -1,0 +1,92 @@
+﻿<sf:RibbonWindow x:Class="PasswordChecker.UI.Windows.SettingsWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:sf="http://schemas.syncfusion.com/wpf"
+                 xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+                 xmlns:viewModel="clr-namespace:PasswordChecker.UI.ViewModel"
+                 xmlns:wpf="clr-namespace:PasswordChecker.UI.Wpf"
+                 sf:SfSkinManager.Theme="{sf:SkinManagerExtension ThemeName=Windows11Dark}"
+                 mc:Ignorable="d" Title="Settings" Width="400" Height="500"
+                 d:DataContext="{d:DesignInstance viewModel:SettingsViewModel}">
+    <DockPanel>
+        <sf:Ribbon x:Name="WindowRibbon" DockPanel.Dock="Top" VerticalAlignment="Top" MinimizeButtonVisibility="Collapsed"
+                   EnableSimplifiedLayoutMode="False" LayoutMode="Normal" BackStage="{x:Null}" RibbonState="Normal"
+                   RibbonContextMenuOpening="WindowRibbon_OnRibbonContextMenuOpening">
+            <sf:Ribbon.BackStageButton>
+                <sf:BackStageButton Visibility="Collapsed" />
+            </sf:Ribbon.BackStageButton>
+
+            <sf:RibbonTab Caption="Home" IsChecked="True">
+                <sf:RibbonBar Header="Actions" IsLauncherButtonVisible="False">
+                    <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Large"
+                             Label="Run"
+                             Command="{Binding Path=SaveCommand, Mode=OneTime}"
+                             LargeIcon="{fa:IconSource Save, Foreground=White, IconFont=Solid}" />
+
+                    <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Small"
+                             Label="Cancel"
+                             Command="{Binding Path=CancelCommand, Mode=OneTime}"
+                             SmallIcon="{fa:IconSource Cancel, Foreground=White, IconFont=Solid}" />
+                </sf:RibbonBar>
+
+                <sf:RibbonBar Header="Extras" IsLauncherButtonVisible="False">
+                    <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Small"
+                                     Label="Open repository"
+                                     SmallIcon="{fa:IconSource Github, Foreground=White, IconFont=Brands}"
+                                     Command="{x:Static wpf:StaticCommands.OpenUriCommand}"
+                                     CommandParameter="https://github.com/florian-berger/NPWS-PasswordChecker" />
+
+                    <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Small"
+                                     Label="Third-party licenses"
+                                     SmallIcon="{fa:IconSource Stamp, Foreground=White, IconFont=Solid}" />
+                </sf:RibbonBar>
+            </sf:RibbonTab>
+        </sf:Ribbon>
+
+        <Grid Margin="12,5,12,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="Language" FontWeight="Bold" VerticalAlignment="Center" />
+            <Grid Grid.Column="2" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <sf:ComboBoxAdv ItemsSource="{Binding Path=AvailableLanguages, Mode=OneWay}"
+                                SelectedItem="{Binding Path=SelectedLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                DisplayMemberPath="DisplayName" Padding="5" VerticalAlignment="Center" />
+
+                <fa:IconImage Icon="Edit" Foreground="LightBlue" Grid.Column="1" Height="16" VerticalAlignment="Center" Margin="5,0,0,0"
+                              ToolTip="Requires restart to take effect"
+                              Visibility="{Binding Path=ShowLanguageChangedHint, Mode=OneWay, Converter={StaticResource BoolVisibilityConverter}}"/>
+            </Grid>
+
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="Ignored fields" FontWeight="Bold" VerticalAlignment="Top" />
+            <Grid Grid.Column="2" Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Enter one pattern per line. Use RegEx!" />
+                <TextBox Grid.Row="2" Text="{Binding Path=IgnoredFieldsConfig, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True"
+                         HorizontalAlignment="Stretch" VerticalContentAlignment="Top" FontSize="16" FontFamily="Courier New" VerticalAlignment="Stretch"
+                         VerticalScrollBarVisibility="Auto"/>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</sf:RibbonWindow>

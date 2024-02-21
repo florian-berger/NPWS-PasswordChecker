@@ -43,6 +43,7 @@
                 <sf:RibbonBar Header="Extras" IsLauncherButtonVisible="False">
                     <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Large"
                                      Label="Settings"
+                                     Command="{Binding Path=SettingsCommand, Mode=OneTime}"
                                      LargeIcon="{fa:IconSource Gears, Foreground=White, IconFont=Solid}" />
 
                     <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Small"
