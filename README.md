@@ -4,6 +4,9 @@ This tool uses the SDK/API of [Netwrix Password Secure](https://www.netwrix.com/
 > [!NOTE]  
 > The Password Secure SDK/API can only be used for customers with the Enterprise Plus license and MSP customers.
 
+## Contribution
+To contribute to the development of this project, take a look at the [Contribution guidelines for this project](CONTRIBUTION.md).
+
 ## Security checks
 ### Quality
 Currently, the quality calculation is done with the algorithm provided by Netwrix. But I implemented different boundaries for the ratings (Weak, Good, Strong), ignoring the settings that can be set in the solution.
@@ -29,3 +32,8 @@ In case you have stored information that should not be checked, you can simply c
 The result can be saved as PDF report. It contains all relevant security information detected above.
 > [!IMPORTANT]  
 > No clear-text value of any password is exported into the PDF file.
+
+## License
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+The content of this project is licensed under the MIT license. I am not allowed and not able to license the binaries of Syncfusion as well as the Netwrix Password Secure SDK/API as part of this project!
