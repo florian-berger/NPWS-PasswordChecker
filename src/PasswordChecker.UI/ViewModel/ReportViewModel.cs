@@ -9,14 +9,22 @@ using PasswordChecker.Data;
 using PasswordChecker.Pdf;
 using PasswordChecker.Resources.Language;
 using PasswordChecker.Shared.Helpers;
+using PasswordChecker.UI.Enums;
+using PasswordChecker.UI.Windows;
 using Prism.Commands;
 using Prism.Mvvm;
 using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
 
 namespace PasswordChecker.UI.ViewModel
 {
-    internal class ReportViewModel(ReportData data, LogonData? logonData) : BindableBase
+    internal class ReportViewModel(ReportData data, LogonData? logonData, Window windowInstance) : BindableBase
     {
+        #region Private variables
+
+        private Window _windowInstance = windowInstance;
+
+        #endregion Private variables
+
         #region Properties
 
         public ReportData Report { get; } = data;
@@ -81,9 +89,10 @@ namespace PasswordChecker.UI.ViewModel
                 // TODO: Error Handling
             }
 
-            var result = MessageBox.Show(windowInstance, ReportResource.ReportExportSucceeded, ReportResource.SuccessfullySaved,
-                MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (result == MessageBoxResult.Yes)
+            var result = CustomMessageBoxWindow.ShowDialog(ReportResource.ReportExportSucceeded,
+                ReportResource.SuccessfullySaved, CustomMessageBoxButtons.YesNo, CustomMessageBoxImage.Question,
+                _windowInstance);
+            if (result == CustomMessageBoxResult.Yes)
             {
                 ProcessHelper.OpenFileInDefaultProgram(targetFile);
             }

@@ -17,7 +17,7 @@ namespace PasswordChecker.UI.Windows
             Owner = Application.Current.MainWindow;
             InitializeComponent();
 
-            DataContext = new ReportViewModel(reportData, logonData);
+            DataContext = new ReportViewModel(reportData, logonData, this);
         }
 
         private void Chart_OnInitialized(object? sender, EventArgs e)
