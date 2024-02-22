@@ -185,4 +185,7 @@
   <data name="DurationSeconds" xml:space="preserve">
     <value>seconds</value>
   </data>
+  <data name="ConnectionInfo" xml:space="preserve">
+    <value>Connection data</value>
+  </data>
 </root>

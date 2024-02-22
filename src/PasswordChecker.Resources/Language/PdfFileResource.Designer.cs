@@ -214,6 +214,15 @@ namespace PasswordChecker.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection data.
+        /// </summary>
+        public static string ConnectionInfo {
+            get {
+                return ResourceManager.GetString("ConnectionInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The following {0:N0} passwords are sharing the same value:.
         /// </summary>
         public static string DuplicatesHeading {

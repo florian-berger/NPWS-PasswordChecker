@@ -123,10 +123,10 @@ namespace PasswordChecker.Pdf
 
             if (_logonData != null)
             {
-                generalTable.Rows.Add(" ", " ");
-                generalTable.Rows.Add(PdfFileResource.CheckServerAddress, _logonData.ServerAddress);
-                generalTable.Rows.Add(PdfFileResource.CheckDatabaseName, _logonData.DatabaseName);
-                generalTable.Rows.Add(PdfFileResource.CheckUserName, _logonData.UserDisplayName ?? _logonData.UserName);
+                generalTable.Rows.Add(PdfFileResource.ConnectionInfo, " ");
+                generalTable.Rows.Add($"    {PdfFileResource.CheckServerAddress}", _logonData.ServerAddress);
+                generalTable.Rows.Add($"    {PdfFileResource.CheckDatabaseName}", _logonData.DatabaseName);
+                generalTable.Rows.Add($"    {PdfFileResource.CheckUserName}", _logonData.UserDisplayName ?? _logonData.UserName);
             }
 
             var generalGrid = new PdfGrid
