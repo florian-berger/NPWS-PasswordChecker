@@ -5,26 +5,31 @@
     /// </summary>
     public static class TimeSpanExtensions
     {
-        public static string ToReadableFullText(this TimeSpan input)
+        public static string ToReadableFullText(this TimeSpan input, string textDays, string textHours, string textMinutes, string textSeconds)
         {
-            string durationString;
             if (input.Days > 0)
             {
-                return $"{input.Days} days, {input.Hours} hours, {input.Minutes} minutes, {input.Seconds} seconds";
+                return $"{input.Days} {textDays}, " +
+                       $"{input.Hours} {textHours}, " +
+                       $"{input.Minutes} {textMinutes}, " +
+                       $"{input.Seconds} {textSeconds}";
             }
 
             if (input.Hours > 0)
             {
-                return $"{input.Hours} hours, {input.Minutes} minutes, {input.Seconds} seconds";
+                return $"{input.Hours} {textHours}, " +
+                       $"{input.Minutes} {textMinutes}, " +
+                       $"{input.Seconds} {textSeconds}";
             }
 
             if (input.Minutes > 0)
             {
-                return $"{input.Minutes} minutes, {input.Seconds} seconds";
+                return $"{input.Minutes} {textMinutes}, " +
+                       $"{input.Seconds} {textSeconds}";
             }
 
             
-            return $"{input.Seconds} seconds";
+            return $"{input.Seconds} {textSeconds}";
         }
     }
 }

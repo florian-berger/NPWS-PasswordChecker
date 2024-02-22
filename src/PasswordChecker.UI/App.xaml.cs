@@ -1,9 +1,7 @@
 ﻿using PasswordChecker.Shared.Configuration;
 using System;
 using System.Globalization;
-using System.Threading;
 using System.Windows;
-using System.Windows.Markup;
 using System.Windows.Threading;
 using PasswordChecker.Resources;
 using PasswordChecker.Shared.Helpers;
@@ -40,13 +38,13 @@ namespace PasswordChecker.UI
         {
             Configuration = await CheckerConfig.LoadConfig();
 
-            var culture = new CultureInfo(Configuration.Language!);
-            LanguageHelper.SetLanguage(culture);
+            Current.Dispatcher.Invoke(() =>
+            {
+                var culture = new CultureInfo(Configuration.Language!);
+                LanguageHelper.SetLanguage(culture);
 
-            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement),
-                new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(culture.IetfLanguageTag)));
-
-            Current.Dispatcher.Invoke(UiThreadHelper.Initialize);
+                UiThreadHelper.Initialize();
+            });
 
             new MainWindow().Show();
         }

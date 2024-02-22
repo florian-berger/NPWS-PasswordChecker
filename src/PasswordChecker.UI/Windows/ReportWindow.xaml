@@ -12,7 +12,7 @@
                      xmlns:ui="clr-namespace:PasswordChecker.UI"
                      mc:Ignorable="d" ShowHelpButton="False"
                      sf:SfSkinManager.Theme="{sf:SkinManager ThemeName=Windows11Dark}"
-                     Height="490" Width="800" MinHeight="490" MinWidth="800"
+                     Height="490" Width="800" MinHeight="490" MinWidth="800" WindowStartupLocation="CenterOwner"
                      Title="{x:Static lang:ReportResource.WindowTitle}" TitleTextAlignment="Left"
                      x:Name="WindowInstance" d:DataContext="{d:DesignInstance viewModel:ReportViewModel}">
     <sf:RibbonWindow.Resources>

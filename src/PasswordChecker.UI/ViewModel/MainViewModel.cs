@@ -178,6 +178,7 @@ namespace PasswordChecker.UI.ViewModel
         private async Task RunAsync()
         {
             ReportData? reportData;
+            LogonData? logonData = default;
 
             try
             {
@@ -190,10 +191,14 @@ namespace PasswordChecker.UI.ViewModel
                     Step = CheckerStep.ConnectAndLogin
                 };
 
-                var api = AuthenticationViewModel.InitializeAuthentication(LoginServerAddress, LoginDatabaseName, LoginUserName);
+                logonData = new LogonData(LoginServerAddress, LoginDatabaseName, LoginUserName);
+
+                var api = AuthenticationViewModel.InitializeAuthentication(logonData);
 
                 if (api is { SessionState: PsrSessionState.Connected })
                 {
+                    logonData.UserDisplayName = api.CurrentUser.DataName();
+
                     try
                     {
                         await RunPasswordAnalysis(api);
@@ -217,7 +222,7 @@ namespace PasswordChecker.UI.ViewModel
 
             if (reportData != null)
             {
-                ShowCheckerReport(reportData);
+                ShowCheckerReport(reportData, logonData);
             }
         }
 
@@ -254,9 +259,9 @@ namespace PasswordChecker.UI.ViewModel
             CancelCommand.Execute();
         }
 
-        private void ShowCheckerReport(ReportData data)
+        private void ShowCheckerReport(ReportData data, LogonData? logonData)
         {
-            new ReportWindow(data).ShowDialog();
+            new ReportWindow(data, logonData).ShowDialog();
         }
 
         #endregion Private methods

@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
 using PasswordChecker.Data;
+using PasswordChecker.Pdf;
 using PasswordChecker.Resources.Language;
+using PasswordChecker.Shared.Helpers;
 using Prism.Commands;
 using Prism.Mvvm;
 using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
 
 namespace PasswordChecker.UI.ViewModel
 {
-    internal class ReportViewModel(ReportData data) : BindableBase
+    internal class ReportViewModel(ReportData data, LogonData? logonData) : BindableBase
     {
         #region Properties
 
@@ -73,7 +74,7 @@ namespace PasswordChecker.UI.ViewModel
 
             try
             {
-                // TODO: PDF Generation
+                await new Generator(Report, logonData).Generate(targetFile);
             }
             catch (Exception ex)
             {
@@ -84,7 +85,7 @@ namespace PasswordChecker.UI.ViewModel
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
-                Process.Start(targetFile);
+                ProcessHelper.OpenFileInDefaultProgram(targetFile);
             }
         }
 

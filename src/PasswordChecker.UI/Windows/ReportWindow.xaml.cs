@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using PasswordChecker.Data;
 using PasswordChecker.UI.ViewModel;
 using Syncfusion.UI.Xaml.Charts;
-using Syncfusion.Windows.Tools.Controls;
-using Syncfusion.Windows.Tools;
-using System.Windows.Controls.Ribbon;
 
 namespace PasswordChecker.UI.Windows
 {
@@ -16,12 +12,12 @@ namespace PasswordChecker.UI.Windows
     /// </summary>
     public partial class ReportWindow
     {
-        public ReportWindow(ReportData reportData)
+        public ReportWindow(ReportData reportData, LogonData? logonData)
         {
             Owner = Application.Current.MainWindow;
             InitializeComponent();
 
-            DataContext = new ReportViewModel(reportData);
+            DataContext = new ReportViewModel(reportData, logonData);
         }
 
         private void Chart_OnInitialized(object? sender, EventArgs e)

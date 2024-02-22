@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
+using PasswordChecker.Data;
 using PasswordChecker.Resources.Language;
 using PasswordChecker.Shared.Helpers;
 using PasswordChecker.UI.BindingObjects;
@@ -127,22 +128,20 @@ namespace PasswordChecker.UI.ViewModel
         /// <summary>
         ///     Creates an instance of the ViewModel
         /// </summary>
-        /// <param name="serverAddress">Address the checker should connect to</param>
-        /// <param name="databaseName">Name of the database</param>
-        /// <param name="userName">Login name of the user</param>
+        /// <param name="logonData">Data that should be used for logon</param>
         /// <param name="windowInstance">Instance of the window that contains the ViewModel</param>
-        public AuthenticationViewModel(string serverAddress, string databaseName, string userName, Window windowInstance)
+        public AuthenticationViewModel(LogonData logonData, Window windowInstance)
         {
             _windowInstance = windowInstance;
-            _databaseName = databaseName;
-            _userName = userName;
+            _databaseName = logonData.DatabaseName;
+            _userName = logonData.UserName;
 
             _authTypeHelper = new AuthenticationTypeHelperObject();
 
-            serverAddress = UriHelper.MakePasswordSecureApiFromUri(serverAddress);
+            var serverAddress = UriHelper.MakePasswordSecureApiFromUri(logonData.ServerAddress);
             _apiInstance = new PsrApi.PsrApi(serverAddress, new PsrApiOptions
             {
-                ClientName = "PsrApi",
+                ClientName = "PsrApi", // Hack, so the API is allowed to be newer than the server
                 HttpMessageHandlerFactoryCallback = () => new HttpClientHandler
                 {
                     ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
@@ -181,15 +180,13 @@ namespace PasswordChecker.UI.ViewModel
         /// <summary>
         ///     Starts the authentication process
         /// </summary>
-        /// <param name="serverAddress">Address the checker should connect to</param>
-        /// <param name="databaseName">Name of the database</param>
-        /// <param name="userName">Login name of the user</param>
+        /// <param name="logonData">Data that should be used for logon</param>
         /// <returns>Instance of the PsrApi if the authentication succeeded. Otherwise null</returns>
-        public static PsrApi.PsrApi? InitializeAuthentication(string serverAddress, string databaseName, string userName)
+        public static PsrApi.PsrApi? InitializeAuthentication(LogonData logonData)
         {
             var window = new AuthenticationWindow();
 
-            var viewModelInstance = new AuthenticationViewModel(serverAddress, databaseName, userName, window);
+            var viewModelInstance = new AuthenticationViewModel(logonData, window);
             window.DataContext = viewModelInstance;
             window.ShowDialog();
 
