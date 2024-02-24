@@ -125,6 +125,12 @@ namespace PasswordChecker.UI.ViewModel
         public DelegateCommand SettingsCommand => _settingsCommand ??= new DelegateCommand(Settings);
         private DelegateCommand? _settingsCommand;
 
+        /// <summary>
+        ///     Command to open the third party licenses
+        /// </summary>
+        public DelegateCommand ShowThirdPartyLicensesCommand => _showThirdPartyLicensesCommand ??= new DelegateCommand(ShowThirdPartyLicenses);
+        private DelegateCommand? _showThirdPartyLicensesCommand;
+
         #endregion Commands
 
         #region Private methods
@@ -167,6 +173,11 @@ namespace PasswordChecker.UI.ViewModel
         private void Settings()
         {
             SettingsViewModel.OpenSettingsWindow();
+        }
+
+        private void ShowThirdPartyLicenses()
+        {
+            new ThirdPartyLicensesWindow().Show();
         }
 
         private void UpdateCommandsCanExecute()

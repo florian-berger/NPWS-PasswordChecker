@@ -56,7 +56,8 @@
 
                     <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Small"
                                      Label="{x:Static lang:GlobalResource.ThirdPartyLicenses}"
-                                     SmallIcon="{fa:IconSource Stamp, Foreground=White, IconFont=Solid}" />
+                                     SmallIcon="{fa:IconSource Stamp, Foreground=White, IconFont=Solid}"
+                                     Command="{Binding Path=ShowThirdPartyLicensesCommand, Mode=OneWay}"/>
                 </sf:RibbonBar>
             </sf:RibbonTab>
         </sf:Ribbon>

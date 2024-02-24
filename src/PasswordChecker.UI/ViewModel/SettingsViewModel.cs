@@ -92,6 +92,9 @@ namespace PasswordChecker.UI.ViewModel
         public DelegateCommand CancelCommand => _cancelCommand ??= new DelegateCommand(Cancel);
         private DelegateCommand? _cancelCommand;
 
+        public DelegateCommand ShowThirdPartyLicensesCommand => _showThirdPartyLicensesCommand ??= new DelegateCommand(ShowThirdPartyLicenses);
+        private DelegateCommand? _showThirdPartyLicensesCommand;
+
         #endregion Commands
 
         #region Public methods
@@ -121,6 +124,11 @@ namespace PasswordChecker.UI.ViewModel
         private void Cancel()
         {
             _windowInstance.DialogResult = false;
+        }
+
+        private void ShowThirdPartyLicenses()
+        {
+            new ThirdPartyLicensesWindow(_windowInstance).Show();
         }
 
         #endregion Private methods
