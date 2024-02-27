@@ -136,4 +136,10 @@
   <data name="NewPasswordRepetitionNotCorrect" xml:space="preserve">
     <value>Die Wiederholung des Passworts ist falsch</value>
   </data>
+  <data name="AuthType_GoogleAuthConfigurationRequirement" xml:space="preserve">
+    <value>TOTP (Authentifizierungs-App)</value>
+  </data>
+  <data name="AuthType_PkiConfigurationRequirement" xml:space="preserve">
+    <value>PKI</value>
+  </data>
 </root>

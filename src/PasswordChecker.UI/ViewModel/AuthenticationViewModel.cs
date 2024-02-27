@@ -9,6 +9,7 @@ using PasswordChecker.Resources.Language;
 using PasswordChecker.Shared.Helpers;
 using PasswordChecker.UI.BindingObjects;
 using PasswordChecker.UI.Windows;
+using PasswordChecker.UI.Wpf.BindingObjects;
 using Prism.Commands;
 using Prism.Mvvm;
 using PsrApi.Data;
@@ -122,6 +123,15 @@ namespace PasswordChecker.UI.ViewModel
             set => SetProperty(ref _policyErrorText, value);
         } private string? _policyErrorText;
 
+        /// <summary>
+        ///     Possible selections for the user
+        /// </summary>
+        public List<AuthTypeSelectionBinding>? AuthTypesForSelection
+        {
+            get => _authTypesForSelection;
+            set => SetProperty(ref _authTypesForSelection, value);
+        } private List<AuthTypeSelectionBinding>? _authTypesForSelection;
+
         #endregion Properties
 
         #region Constructor
@@ -171,8 +181,16 @@ namespace PasswordChecker.UI.ViewModel
         /// <summary>
         ///     Command to start the authentication
         /// </summary>
-        public DelegateCommand StartAuthenticationCommand => _startAuthenticationCommand ??= new DelegateCommand(StartAuthentication);
+        public DelegateCommand StartAuthenticationCommand =>
+            _startAuthenticationCommand ??= new DelegateCommand(StartAuthentication);
         private DelegateCommand? _startAuthenticationCommand;
+
+        /// <summary>
+        ///     Command to let the user select an authenticator
+        /// </summary>
+        public DelegateCommand<AuthTypeSelectionBinding> SelectAuthenticatorCommand => _selectAuthenticatorCommand ??=
+            new DelegateCommand<AuthTypeSelectionBinding>(SelectAuthenticator);
+        private DelegateCommand<AuthTypeSelectionBinding>? _selectAuthenticatorCommand;
 
         #endregion Commands
 
@@ -245,6 +263,13 @@ namespace PasswordChecker.UI.ViewModel
             }
         }
 
+        private void SelectAuthenticator(AuthTypeSelectionBinding authenticator)
+        {
+            ArgumentNullException.ThrowIfNull(authenticator);
+
+            SetNextRequirement([authenticator.Authentication]);
+        }
+
         private async Task AuthenticateNextStep()
         {
             if (_authFlow == null)
@@ -265,12 +290,8 @@ namespace PasswordChecker.UI.ViewModel
             else
             {
                 var nextRequirement = _authFlow.GetNextRequirement();
-                if (nextRequirement != null)
-                {
-                    FilterUnsupportedAuthentications(nextRequirement.PossibleRequirements);
-                }
-
-                SetNextRequirement(nextRequirement);
+                FilterUnsupportedAuthentications(nextRequirement);
+                SetNextRequirement(nextRequirement.PossibleRequirements);
             }
         }
 
@@ -284,24 +305,25 @@ namespace PasswordChecker.UI.ViewModel
             LoginUserWelcome = _authFlow.GetNameOfUser();
 
             var nextRequirement = _authFlow.GetNextRequirement();
-            SetNextRequirement(nextRequirement);
+            SetNextRequirement(nextRequirement.PossibleRequirements);
         }
 
-        private void SetNextRequirement(AuthenticationRequirements? requirement)
+        private void SetNextRequirement(List<FillableAuthentication>? possibleRequirements)
         {
             AuthTypeHelper.Reset();
             PolicyErrorText = null;
 
-            if (requirement != null && requirement.PossibleRequirements.Count > 0)
+            if (possibleRequirements != null && possibleRequirements.Count > 0)
             {
-                if (requirement.PossibleRequirements.Count > 1)
+                if (possibleRequirements.Count > 1)
                 {
-                    // TODO: Display selection of requirement
+                    AuthTypesForSelection = possibleRequirements.Select(r => new AuthTypeSelectionBinding(r.AuthType, r)).ToList();
+                    AuthTypeHelper.IsAuthTypeSelection = true;
                 }
                 else
                 {
                     // We need to display exactly this requirement
-                    DisplayAuthentication = requirement.PossibleRequirements.First();
+                    DisplayAuthentication = possibleRequirements.First();
 
                     if (DisplayAuthentication is DynamicFillableAuthentication)
                     {
@@ -359,17 +381,17 @@ namespace PasswordChecker.UI.ViewModel
             PolicyErrorText = null;
         }
 
-        private void FilterUnsupportedAuthentications(List<FillableAuthentication> auths)
+        private void FilterUnsupportedAuthentications(AuthenticationRequirements? requirement)
         {
-            if (auths.Count < 1)
+            if (requirement?.PossibleRequirements == null || requirement.PossibleRequirements.Count < 1)
             {
                 return;
             }
 
-            auths.RemoveAll(a => a is FillablePkiConfiguration);
-            auths.RemoveAll(a => a is FillablePkiCredential);
-            auths.RemoveAll(a => a is FillableOdicCredential);
-            auths.RemoveAll(a => a is FillableSmartCardCredential);
+            requirement.PossibleRequirements.RemoveAll(a => a is FillablePkiConfiguration);
+            requirement.PossibleRequirements.RemoveAll(a => a is FillablePkiCredential);
+            requirement.PossibleRequirements.RemoveAll(a => a is FillableOdicCredential);
+            requirement.PossibleRequirements.RemoveAll(a => a is FillableSmartCardCredential);
         }
 
         #endregion Private methods

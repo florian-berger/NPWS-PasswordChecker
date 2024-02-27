@@ -61,6 +61,24 @@ namespace PasswordChecker.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TOTP (Authenticator App).
+        /// </summary>
+        public static string AuthType_GoogleAuthConfigurationRequirement {
+            get {
+                return ResourceManager.GetString("AuthType_GoogleAuthConfigurationRequirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PKI.
+        /// </summary>
+        public static string AuthType_PkiConfigurationRequirement {
+            get {
+                return ResourceManager.GetString("AuthType_PkiConfigurationRequirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New password must not be empty.
         /// </summary>
         public static string ChangePasswordNoPassword {
