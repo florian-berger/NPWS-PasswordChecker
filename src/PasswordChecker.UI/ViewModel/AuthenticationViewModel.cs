@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -264,9 +265,10 @@ namespace PasswordChecker.UI.ViewModel
             else
             {
                 var nextRequirement = _authFlow.GetNextRequirement();
-#if DEBUG
-                nextRequirement?.PossibleRequirements.RemoveAll(r => r is FillablePkiConfiguration);
-#endif
+                if (nextRequirement != null)
+                {
+                    FilterUnsupportedAuthentications(nextRequirement.PossibleRequirements);
+                }
 
                 SetNextRequirement(nextRequirement);
             }
@@ -320,7 +322,7 @@ namespace PasswordChecker.UI.ViewModel
             }
             else
             {
-                throw new InvalidOperationException("Didn't get any requirement from the server.");
+                throw new InvalidOperationException("Didn't get any supported requirement from the server.");
             }
         }
 
@@ -355,6 +357,19 @@ namespace PasswordChecker.UI.ViewModel
             }
 
             PolicyErrorText = null;
+        }
+
+        private void FilterUnsupportedAuthentications(List<FillableAuthentication> auths)
+        {
+            if (auths.Count < 1)
+            {
+                return;
+            }
+
+            auths.RemoveAll(a => a is FillablePkiConfiguration);
+            auths.RemoveAll(a => a is FillablePkiCredential);
+            auths.RemoveAll(a => a is FillableOdicCredential);
+            auths.RemoveAll(a => a is FillableSmartCardCredential);
         }
 
         #endregion Private methods
