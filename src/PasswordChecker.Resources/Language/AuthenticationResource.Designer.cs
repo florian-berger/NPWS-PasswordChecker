@@ -169,6 +169,33 @@ namespace PasswordChecker.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User is locked.
+        /// </summary>
+        public static string LoginIsLocked {
+            get {
+                return ResourceManager.GetString("LoginIsLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login locked (try #{0}) for {1} seconds.
+        /// </summary>
+        public static string LoginLockedForSeconds {
+            get {
+                return ResourceManager.GetString("LoginLockedForSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login locked (try #{0}) until {1}.
+        /// </summary>
+        public static string LoginLockedUntil {
+            get {
+                return ResourceManager.GetString("LoginLockedUntil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New password.
         /// </summary>
         public static string NewPassword {

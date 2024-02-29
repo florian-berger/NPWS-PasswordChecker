@@ -151,4 +151,13 @@
   <data name="AuthType_RsaSecurIdTokenConfigurationRequirement" xml:space="preserve">
     <value>RSA SecurId</value>
   </data>
+  <data name="LoginLockedUntil" xml:space="preserve">
+    <value>Login locked (try #{0}) until {1}</value>
+  </data>
+  <data name="LoginLockedForSeconds" xml:space="preserve">
+    <value>Login locked (try #{0}) for {1} seconds</value>
+  </data>
+  <data name="LoginIsLocked" xml:space="preserve">
+    <value>User is locked</value>
+  </data>
 </root>

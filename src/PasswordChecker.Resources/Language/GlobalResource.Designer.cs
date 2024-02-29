@@ -88,6 +88,15 @@ namespace PasswordChecker.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extras.
         /// </summary>
         public static string Extras {
@@ -147,6 +156,15 @@ namespace PasswordChecker.Resources.Language {
         public static string ThirdPartyLicenses {
             get {
                 return ResourceManager.GetString("ThirdPartyLicenses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        public static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
     }

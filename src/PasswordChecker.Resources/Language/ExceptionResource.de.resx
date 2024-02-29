@@ -97,67 +97,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="WindowTitle" xml:space="preserve">
-    <value>Authentifizierung</value>
-  </data>
-  <data name="FieldTypePassword" xml:space="preserve">
-    <value>Passwort</value>
-  </data>
-  <data name="FieldTypePin" xml:space="preserve">
-    <value>PIN</value>
-  </data>
-  <data name="FieldTypeToken" xml:space="preserve">
-    <value>Token</value>
-  </data>
-  <data name="FieldTypeTokenUsername" xml:space="preserve">
-    <value>Benutzername für Token</value>
-  </data>
-  <data name="FieldTypeNotSupported" xml:space="preserve">
-    <value>Entschuldigung, der angeforderte Feldtyp wird vom Password Checker leider nicht unterstützt. Sie können sich im Moment nicht anmelden. Bitte erstellen Sie ein Issue im GitHub-Repository.</value>
-  </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>Willkommen</value>
-  </data>
-  <data name="NewPasswordRepetition" xml:space="preserve">
-    <value>Neues Passwort (Wiederholung)</value>
-  </data>
-  <data name="NewPassword" xml:space="preserve">
-    <value>Neues Passwort</value>
-  </data>
-  <data name="PleaseWait" xml:space="preserve">
-    <value>Bitte warten</value>
-  </data>
-  <data name="ChangePasswordNoPassword" xml:space="preserve">
-    <value>Neues Passwort darf nicht leer sein</value>
-  </data>
-  <data name="ChangePasswordRepeatPassword" xml:space="preserve">
-    <value>Bitte wiederholen Sie das neue Passwort</value>
-  </data>
-  <data name="NewPasswordRepetitionNotCorrect" xml:space="preserve">
-    <value>Die Wiederholung des Passworts ist falsch</value>
-  </data>
-  <data name="AuthType_GoogleAuthConfigurationRequirement" xml:space="preserve">
-    <value>TOTP (Authentifizierungs-App)</value>
-  </data>
-  <data name="AuthType_PkiConfigurationRequirement" xml:space="preserve">
-    <value>PKI</value>
-  </data>
-  <data name="AuthType_RsaSecurIdTokenConfigurationRequirement" xml:space="preserve">
-    <value>RSA SecurId</value>
-  </data>
-  <data name="AuthType_YubicoOneTimePasswordConfigurationRequirement" xml:space="preserve">
-    <value>Yubico OTP</value>
-  </data>
-  <data name="AuthType_SafeNetOneTimePasswordConfigurationRequirement" xml:space="preserve">
-    <value>SafeNet OTP</value>
-  </data>
-  <data name="LoginLockedUntil" xml:space="preserve">
-    <value>Login gesperrt (Versuch {0}) bis {1}</value>
-  </data>
-  <data name="LoginLockedForSeconds" xml:space="preserve">
-    <value>Login gesperrt (Versuch {0}) für {1} Sekunden</value>
-  </data>
-  <data name="LoginIsLocked" xml:space="preserve">
-    <value>Benutzer ist gesperrt</value>
+  <data name="Unknown" xml:space="preserve">
+    <value>Ein unbekannter Fehler ist aufgetreten. Bitte erstellen Sie ein Issue auf GitHub und beschreiben Sie, wie er aufgetreten ist.</value>
   </data>
 </root>

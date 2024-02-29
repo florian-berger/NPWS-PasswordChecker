@@ -3,23 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
+using Newtonsoft.Json;
 using PasswordChecker.Data;
 using PasswordChecker.Resources.Language;
 using PasswordChecker.Shared.Helpers;
 using PasswordChecker.UI.BindingObjects;
+using PasswordChecker.UI.Enums;
+using PasswordChecker.UI.Helpers;
 using PasswordChecker.UI.Windows;
 using PasswordChecker.UI.Wpf.BindingObjects;
 using Prism.Commands;
 using Prism.Mvvm;
 using PsrApi.Data;
+using PsrApi.Data.Authentication.AdditionalObjects;
 using PsrApi.Internals.AuthFlow;
 using PsrApi.Internals.AuthFlow.Data;
 using PsrApi.Managers;
+using JsonSerializer = PasswordChecker.Shared.Helpers.JsonSerializer;
 
 namespace PasswordChecker.UI.ViewModel
 {
-    public class AuthenticationViewModel : BindableBase
+    public class AuthenticationViewModel : BindableBase, IDisposable
     {
         #region Private variables
 
@@ -31,6 +37,7 @@ namespace PasswordChecker.UI.ViewModel
         private IAuthenticationFlow? _authFlow;
 
         private PsrPolicy? _newPasswordPolicy;
+        private readonly Timer _loginLockTimer;
 
         #endregion Private variables
 
@@ -132,6 +139,33 @@ namespace PasswordChecker.UI.ViewModel
             set => SetProperty(ref _authTypesForSelection, value);
         } private List<AuthTypeSelectionBinding>? _authTypesForSelection;
 
+        public LoginLock? LockInformation
+        {
+            get => _lockInformation;
+            set
+            {
+                if (SetProperty(ref _lockInformation, value))
+                {
+                    ConfirmCommand.RaiseCanExecuteChanged();
+                }
+
+                if (_lockInformation != null)
+                {
+                    _loginLockTimer.Start();
+                }
+                else
+                {
+                    _loginLockTimer.Stop();
+                }
+            }
+        } private LoginLock? _lockInformation;
+
+        public string? LoginLockedText
+        {
+            get => _loginLockedText;
+            set => SetProperty(ref _loginLockedText, value);
+        } private string? _loginLockedText;
+
         #endregion Properties
 
         #region Constructor
@@ -148,6 +182,12 @@ namespace PasswordChecker.UI.ViewModel
             _userName = logonData.UserName;
 
             _authTypeHelper = new AuthenticationTypeHelperObject();
+            _loginLockTimer = new Timer(1000)
+            {
+                Enabled = false,
+                AutoReset = true
+            };
+            _loginLockTimer.Elapsed += LoginLockTimerOnElapsed;
 
             var serverAddress = UriHelper.MakePasswordSecureApiFromUri(logonData.ServerAddress);
             _apiInstance = new PsrApi.PsrApi(serverAddress, new PsrApiOptions
@@ -175,7 +215,7 @@ namespace PasswordChecker.UI.ViewModel
         /// <summary>
         ///     Command to cancel the authentication
         /// </summary>
-        public DelegateCommand ConfirmCommand => _confirmCommand ??= new DelegateCommand(Confirm);
+        public DelegateCommand ConfirmCommand => _confirmCommand ??= new DelegateCommand(Confirm, CanConfirm);
         private DelegateCommand? _confirmCommand;
 
         /// <summary>
@@ -218,6 +258,7 @@ namespace PasswordChecker.UI.ViewModel
 
         private void Cancel()
         {
+            _loginLockTimer.Stop();
             _windowInstance.DialogResult = false;
         }
 
@@ -231,12 +272,17 @@ namespace PasswordChecker.UI.ViewModel
             }
             catch (Exception ex)
             {
-                // TODO: Error Handling
+                HandleLoginException(ex);
             }
             finally
             {
                 IsWorking = false;
             }
+        }
+
+        private bool CanConfirm()
+        {
+            return LockInformation == null;
         }
 
         private async void StartAuthentication()
@@ -255,7 +301,19 @@ namespace PasswordChecker.UI.ViewModel
             }
             catch (Exception ex)
             {
-                // TODO: Error Handling
+                HandleLoginException(ex);
+
+                // The user is locked, we can't show any requirement.
+                if (LockInformation != null)
+                {
+                    UiThreadHelper.RunOnUiThread(() =>
+                    {
+                        Cancel();
+
+                        CustomMessageBoxWindow.ShowDialog(LoginLockedText ?? AuthenticationResource.LoginIsLocked,
+                            GlobalResource.Error, CustomMessageBoxButtons.Ok, CustomMessageBoxImage.Error);
+                    });
+                }
             }
             finally
             {
@@ -394,6 +452,89 @@ namespace PasswordChecker.UI.ViewModel
             requirement.PossibleRequirements.RemoveAll(a => a is FillableSmartCardCredential);
         }
 
+        private void HandleLoginException(Exception exception)
+        {
+            // If the exception is a login lock, the details of it are serialized in the message.
+            // So we try to deserialize it and handle it properly then
+            if (!string.IsNullOrWhiteSpace(exception.InnerException?.Message))
+            {
+                try
+                {
+                    var loginLock = JsonSerializer.DeserializeObject<LoginLock>(exception.InnerException.Message);
+                    if (loginLock != null)
+                    {
+                        HandleLoginLock(loginLock);
+                        return;
+                    }
+                }
+                catch (JsonSerializationException)
+                {
+                    // No login lock - handle it another way
+                }
+            }
+
+            HandleOtherException(exception);
+        }
+
+        private void HandleLoginLock(LoginLock loginLock)
+        {
+            ArgumentNullException.ThrowIfNull(loginLock);
+
+            UiThreadHelper.RunOnUiThread(() =>
+            {
+                LockInformation = loginLock;
+                SetLoginLockedText();
+            });
+        }
+
+        private void HandleOtherException(Exception exception)
+        {
+            UiThreadHelper.RunOnUiThread(() =>
+            {
+                CustomMessageBoxWindow.ShowDialog(ExceptionHelper.GetExceptionText(exception), GlobalResource.Error,
+                    CustomMessageBoxButtons.Ok, CustomMessageBoxImage.Error, _windowInstance);
+            });
+        }
+
+        private void LoginLockTimerOnElapsed(object? sender, ElapsedEventArgs e)
+        {
+            UiThreadHelper.RunOnUiThread(SetLoginLockedText);
+        }
+
+        private void SetLoginLockedText()
+        {
+            var now = DateTime.UtcNow;
+            if (LockInformation == null || LockInformation.LockedUntilUtc < now)
+            {
+                LockInformation = null;
+                LoginLockedText = null;
+                return;
+            }
+
+            var timeDifference = LockInformation.LockedUntilUtc - now;
+            if (timeDifference.Minutes > 0)
+            {
+                var localTime = LockInformation.LockedUntilUtc.ToLocalTime();
+                LoginLockedText = string.Format(AuthenticationResource.LoginLockedUntil, LockInformation.LoginTry,
+                    localTime.ToString("G"));
+            }
+            else
+            {
+                LoginLockedText = string.Format(AuthenticationResource.LoginLockedForSeconds, LockInformation.LoginTry,
+                    Math.Max(1, timeDifference.Seconds));
+            }
+        }
+
         #endregion Private methods
+
+        #region IDisposable
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            _loginLockTimer.Dispose();
+        }
+
+        #endregion IDisposable
     }
 }
