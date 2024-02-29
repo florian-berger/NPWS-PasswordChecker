@@ -142,4 +142,13 @@
   <data name="AuthType_PkiConfigurationRequirement" xml:space="preserve">
     <value>PKI</value>
   </data>
+  <data name="AuthType_RsaSecurIdTokenConfigurationRequirement" xml:space="preserve">
+    <value>RSA SecurId</value>
+  </data>
+  <data name="AuthType_YubicoOneTimePasswordConfigurationRequirement" xml:space="preserve">
+    <value>Yubico OTP</value>
+  </data>
+  <data name="AuthType_SafeNetOneTimePasswordConfigurationRequirement" xml:space="preserve">
+    <value>SafeNet OTP</value>
+  </data>
 </root>

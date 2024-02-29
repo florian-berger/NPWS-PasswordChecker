@@ -79,6 +79,33 @@ namespace PasswordChecker.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RSA SecurId.
+        /// </summary>
+        public static string AuthType_RsaSecurIdTokenConfigurationRequirement {
+            get {
+                return ResourceManager.GetString("AuthType_RsaSecurIdTokenConfigurationRequirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SafeNet OTP.
+        /// </summary>
+        public static string AuthType_SafeNetOneTimePasswordConfigurationRequirement {
+            get {
+                return ResourceManager.GetString("AuthType_SafeNetOneTimePasswordConfigurationRequirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yubico OTP.
+        /// </summary>
+        public static string AuthType_YubicoOneTimePasswordConfigurationRequirement {
+            get {
+                return ResourceManager.GetString("AuthType_YubicoOneTimePasswordConfigurationRequirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New password must not be empty.
         /// </summary>
         public static string ChangePasswordNoPassword {
