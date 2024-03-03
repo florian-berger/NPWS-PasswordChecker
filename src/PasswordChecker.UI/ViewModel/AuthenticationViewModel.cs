@@ -310,7 +310,7 @@ namespace PasswordChecker.UI.ViewModel
                     {
                         Cancel();
 
-                        CustomMessageBoxWindow.ShowDialog(LoginLockedText ?? AuthenticationResource.LoginIsLocked,
+                        CustomMessageBox.ShowDialog(LoginLockedText ?? AuthenticationResource.LoginIsLocked,
                             GlobalResource.Error, CustomMessageBoxButtons.Ok, CustomMessageBoxImage.Error);
                     });
                 }
@@ -491,8 +491,7 @@ namespace PasswordChecker.UI.ViewModel
         {
             UiThreadHelper.RunOnUiThread(() =>
             {
-                CustomMessageBoxWindow.ShowDialog(ExceptionHelper.GetExceptionText(exception), GlobalResource.Error,
-                    CustomMessageBoxButtons.Ok, CustomMessageBoxImage.Error, _windowInstance);
+                CustomMessageBox.ShowErrorDialog(exception, _windowInstance);
             });
         }
 

@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using PasswordChecker.Data;
 using PasswordChecker.Shared.Configuration;
+using PasswordChecker.UI.Enums;
+using PasswordChecker.UI.Helpers;
 using PasswordChecker.UI.Windows;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -223,7 +225,7 @@ namespace PasswordChecker.UI.ViewModel
             }
             catch (Exception ex)
             {
-                // TODO: Error Handling
+                CustomMessageBox.ShowErrorDialog(ex);
             }
             finally
             {

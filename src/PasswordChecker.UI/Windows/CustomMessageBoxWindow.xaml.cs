@@ -4,6 +4,7 @@ using System.Windows;
 using PasswordChecker.Resources.Language;
 using PasswordChecker.UI.BindingObjects;
 using PasswordChecker.UI.Enums;
+using PasswordChecker.UI.Helpers;
 using Prism.Commands;
 
 namespace PasswordChecker.UI.Windows
@@ -49,7 +50,10 @@ namespace PasswordChecker.UI.Windows
 
         #region Constructor
 
-        private CustomMessageBoxWindow(CustomMessageBoxButtons buttons, CustomMessageBoxImage icon, string title, string content, Window owner)
+        /// <summary>
+        ///     Should NEVER be called directly! Always use <see cref="CustomMessageBox" />
+        /// </summary>
+        internal CustomMessageBoxWindow(CustomMessageBoxButtons buttons, CustomMessageBoxImage icon, string title, string content, Window owner)
         {
             Owner = owner;
 
@@ -63,24 +67,6 @@ namespace PasswordChecker.UI.Windows
         }
 
         #endregion Constructor
-
-        #region Public methods
-
-        public static CustomMessageBoxResult ShowDialog(string message, string title, CustomMessageBoxButtons buttons, CustomMessageBoxImage icon, Window? owner = null)
-        {
-            var windowOwner = owner ?? Application.Current.MainWindow;
-            if (windowOwner == null)
-            {
-                throw new InvalidOperationException("Can't find an owner window");
-            }
-
-            var instance = new CustomMessageBoxWindow(buttons, icon, title, message, windowOwner);
-            instance.ShowDialog();
-
-            return instance.Result;
-        }
-
-        #endregion Public methods
 
         #region Private methods
 

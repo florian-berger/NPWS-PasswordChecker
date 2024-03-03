@@ -10,7 +10,7 @@ using PasswordChecker.Pdf;
 using PasswordChecker.Resources.Language;
 using PasswordChecker.Shared.Helpers;
 using PasswordChecker.UI.Enums;
-using PasswordChecker.UI.Windows;
+using PasswordChecker.UI.Helpers;
 using Prism.Commands;
 using Prism.Mvvm;
 using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
@@ -19,12 +19,6 @@ namespace PasswordChecker.UI.ViewModel
 {
     internal class ReportViewModel(ReportData data, LogonData? logonData, Window windowInstance) : BindableBase
     {
-        #region Private variables
-
-        private Window _windowInstance = windowInstance;
-
-        #endregion Private variables
-
         #region Properties
 
         public ReportData Report { get; } = data;
@@ -39,14 +33,14 @@ namespace PasswordChecker.UI.ViewModel
         /// <summary>
         ///     Command to save the report as PDf file
         /// </summary>
-        public DelegateCommand<Window> SavePdfCommand => _savePdfCommand ??= new DelegateCommand<Window>(SavePdf);
-        private DelegateCommand<Window>? _savePdfCommand;
+        public DelegateCommand SavePdfCommand => _savePdfCommand ??= new DelegateCommand(SavePdf);
+        private DelegateCommand? _savePdfCommand;
 
         #endregion Commands
 
         #region Private methods
 
-        private void SavePdf(Window windowInstance)
+        private void SavePdf()
         {
             var fileDlg = new SaveFileDialog
             {
@@ -61,11 +55,11 @@ namespace PasswordChecker.UI.ViewModel
 
             if (fileDlg.ShowDialog(windowInstance) == true)
             {
-                _ = SaveFile(fileDlg.FileName, windowInstance);
+                _ = SaveFile(fileDlg.FileName);
             }
         }
 
-        private async Task SaveFile(string targetFile, Window windowInstance)
+        private async Task SaveFile(string targetFile)
         {
             if (File.Exists(targetFile))
             {
@@ -86,12 +80,13 @@ namespace PasswordChecker.UI.ViewModel
             }
             catch (Exception ex)
             {
-                // TODO: Error Handling
+                CustomMessageBox.ShowErrorDialog(ex, windowInstance);
+                return;
             }
 
-            var result = CustomMessageBoxWindow.ShowDialog(ReportResource.ReportExportSucceeded,
+            var result = CustomMessageBox.ShowDialog(ReportResource.ReportExportSucceeded,
                 ReportResource.SuccessfullySaved, CustomMessageBoxButtons.YesNo, CustomMessageBoxImage.Question,
-                _windowInstance);
+                windowInstance);
             if (result == CustomMessageBoxResult.Yes)
             {
                 ProcessHelper.OpenFileInDefaultProgram(targetFile);
