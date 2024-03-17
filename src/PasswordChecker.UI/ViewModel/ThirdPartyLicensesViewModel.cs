@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using PasswordChecker.Resources.Language;
 using PasswordChecker.UI.BindingObjects;
+using PasswordChecker.UI.Windows;
 #if !DEBUG
 using PasswordChecker.Resources.Language;
 #endif
@@ -35,6 +36,15 @@ namespace PasswordChecker.UI.ViewModel
         } private ThirdPartyLicenseBinding? _selectedLicense;
 
         #endregion Properties
+
+        #region Public methods
+
+        public static void OpenLicensesWindow()
+        {
+            new ThirdPartyLicensesWindow().Show();
+        }
+
+        #endregion Public methods
 
         #region Private methods
 

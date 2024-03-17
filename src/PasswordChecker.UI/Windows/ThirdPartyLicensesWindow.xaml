@@ -15,6 +15,7 @@
                      WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow"
                      sf:SfSkinManager.Theme="{sf:SkinManager ThemeName=Windows11Dark}"
                      Title="{x:Static lang:ThirdPartyLicensesResource.WindowTitle}"
+                     Icon="{fa:IconSource Stamp, Foreground=White}"
                      Height="500" Width="800">
     <sf:ChromelessWindow.Resources>
         <converters:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />

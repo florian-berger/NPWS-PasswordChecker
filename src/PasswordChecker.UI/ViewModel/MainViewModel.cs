@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using PasswordChecker.Data;
 using PasswordChecker.Shared.Configuration;
-using PasswordChecker.UI.Enums;
 using PasswordChecker.UI.Helpers;
 using PasswordChecker.UI.Windows;
 using Prism.Commands;
@@ -179,7 +178,7 @@ namespace PasswordChecker.UI.ViewModel
 
         private void ShowThirdPartyLicenses()
         {
-            new ThirdPartyLicensesWindow().Show();
+            ThirdPartyLicensesViewModel.OpenLicensesWindow();
         }
 
         private void UpdateCommandsCanExecute()

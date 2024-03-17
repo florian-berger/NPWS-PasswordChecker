@@ -13,6 +13,7 @@
                  mc:Ignorable="d"
                  d:DataContext="{d:DesignInstance viewModel:SettingsViewModel}"
                  WindowStartupLocation="CenterOwner" ResizeMode="NoResize" ShowHelpButton="False"
+                 Icon="{fa:IconSource Gears, Foreground=White}"
                  Title="{x:Static lang:SettingsResource.WindowTitle}" Width="400" Height="350">
     <DockPanel>
         <sf:Ribbon x:Name="WindowRibbon" DockPanel.Dock="Top" VerticalAlignment="Top" MinimizeButtonVisibility="Collapsed"

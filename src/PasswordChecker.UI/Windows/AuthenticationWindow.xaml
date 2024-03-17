@@ -12,12 +12,14 @@
                  xmlns:converters="clr-namespace:PasswordChecker.UI.Wpf.Converters"
                  xmlns:lang="clr-namespace:PasswordChecker.Resources.Language;assembly=PasswordChecker.Resources"
                  xmlns:bindingObjects="clr-namespace:PasswordChecker.UI.Wpf.BindingObjects"
+                 xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
                  mc:Ignorable="d" MaxWidth="300" MaxHeight="500"
                  WindowStyle="ToolWindow" ResizeMode="NoResize"
                  WindowStartupLocation="CenterOwner" ShowHelpButton="False" TitleTextAlignment="Left"
                  SizeToContent="WidthAndHeight" Title="{x:Static lang:AuthenticationResource.WindowTitle}"
                  sf:SfSkinManager.Theme="{sf:SkinManager ThemeName=Windows11Dark}"
                  d:DataContext="{d:DesignInstance viewModel:AuthenticationViewModel}"
+                 Icon="{fa:IconSource SignIn, Foreground=White}"
                  x:Name="AuthWindow">
     <sf:RibbonWindow.Resources>
         <converters:ImageBytesToImageConverter x:Key="ImageBytesToImageConverter" />
