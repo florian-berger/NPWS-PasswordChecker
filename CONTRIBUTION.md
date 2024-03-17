@@ -5,6 +5,15 @@ Everyone is allowed to contribute to this repository - all kind of contribution 
 ### Obtain Syncfusion license
 As first step, **everyone** developing the software has to obtain their own Syncfusion license. You may choose between a [Community License](https://www.syncfusion.com/products/communitylicense) or a [commercial license](https://www.syncfusion.com/sales/teamlicense). For more information about the Syncfusion licensing, take a look at the [SYNCFUSION-LICENSE](SYNCFUSION-LICENSE) file.
 
+After obtaining a license, create an environment variable in your users context with the name "PasswordChecker_SyncFusion_License". As value, save the license key. Make sure that the generated license key matches the currently used SyncFusion version **24.2.6**.
+
+### Get access to Netwrix Password Secure
+[Netwrix Password Secure](https://passwordsafe.com/) is a enterprise password manager. A SDK is provided for accessing secrets in external projects. To gain access to this SDK and to access your database with it, you must fulfill one of the following requirements:
+1. Have a license of the level **Enterprise Plus** installed on your server
+2. You're using a database in a MSP environment
+
+If one of the requirements is matching, place the SDK's `.dll` files in the folder `C:\Dev\SDKs\Netwrix Password Secure\9.0.1.30479`.
+
 ## Did you find a bug?
 * **Do not open an issue if the bug ins in the Netwrix Password Secure SDK/API!** Instead, report this to their Support Team.
 * Ensure that the issue is not yet reported. For this, use the [issues tab](https://github.com/florian-berger/NPWS-PasswordChecker/issues) of this repository.
