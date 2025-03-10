@@ -14,7 +14,7 @@
                      sf:SfSkinManager.Theme="{sf:SkinManager ThemeName=Windows11Dark}"
                      Height="490" Width="800" MinHeight="490" MinWidth="800" WindowStartupLocation="CenterOwner"
                      Title="{x:Static lang:ReportResource.WindowTitle}" TitleTextAlignment="Left"
-                     Icon="../Icon.ico"
+                     Icon="{fa:IconSource Passport, Foreground=White}"
                      d:DataContext="{d:DesignInstance viewModel:ReportViewModel}">
     <sf:RibbonWindow.Resources>
         <converters:IntegerHigherThanNullToVisibilityConverter x:Key="IntegerHigherThanNullToVisibilityConverter" />
