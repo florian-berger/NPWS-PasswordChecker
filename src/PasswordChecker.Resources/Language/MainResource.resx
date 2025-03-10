@@ -121,12 +121,6 @@
   <data name="ServerAddress" xml:space="preserve">
     <value>Server address (WebClient URI)</value>
   </data>
-  <data name="DatabaseName" xml:space="preserve">
-    <value>Database</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Username</value>
-  </data>
   <data name="StepEstablishConnection" xml:space="preserve">
     <value>Establish connection</value>
   </data>
@@ -144,5 +138,8 @@
   </data>
   <data name="StepFinish" xml:space="preserve">
     <value>Finalize</value>
+  </data>
+  <data name="ApiKey" xml:space="preserve">
+    <value>API key</value>
   </data>
 </root>

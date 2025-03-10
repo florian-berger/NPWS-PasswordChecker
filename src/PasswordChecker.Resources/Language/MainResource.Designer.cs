@@ -61,11 +61,11 @@ namespace PasswordChecker.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Database.
+        ///   Looks up a localized string similar to API key.
         /// </summary>
-        public static string DatabaseName {
+        public static string ApiKey {
             get {
-                return ResourceManager.GetString("DatabaseName", resourceCulture);
+                return ResourceManager.GetString("ApiKey", resourceCulture);
             }
         }
         
@@ -183,15 +183,6 @@ namespace PasswordChecker.Resources.Language {
         public static string StepPrepareReport {
             get {
                 return ResourceManager.GetString("StepPrepareReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Username.
-        /// </summary>
-        public static string UserName {
-            get {
-                return ResourceManager.GetString("UserName", resourceCulture);
             }
         }
         

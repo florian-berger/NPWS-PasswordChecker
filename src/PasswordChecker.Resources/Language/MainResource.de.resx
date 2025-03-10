@@ -121,12 +121,6 @@
   <data name="ServerAddress" xml:space="preserve">
     <value>Server-Adresse (WebClient-URL)</value>
   </data>
-  <data name="DatabaseName" xml:space="preserve">
-    <value>Datenbank</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Benutzername</value>
-  </data>
   <data name="StepFinish" xml:space="preserve">
     <value>Finalisieren</value>
   </data>
@@ -144,5 +138,8 @@
   </data>
   <data name="StepCheckPasswords" xml:space="preserve">
     <value>Passwörter prüfen</value>
+  </data>
+  <data name="ApiKey" xml:space="preserve">
+    <value>API Key</value>
   </data>
 </root>

@@ -9,6 +9,7 @@
                  xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
                  xmlns:lang="clr-namespace:PasswordChecker.Resources.Language;assembly=PasswordChecker.Resources"
                  xmlns:ui="clr-namespace:PasswordChecker.UI"
+                 xmlns:controlHelpers="clr-namespace:PasswordChecker.UI.Wpf.ControlHelpers"
                  sf:SfSkinManager.Theme="{sf:SkinManager ThemeName=Windows11Dark}"
                  mc:Ignorable="d" Title="{x:Static lang:MainResource.WindowTitle}" ShowHelpButton="False"
                  Icon="{fa:IconSource Passport, Foreground=White}"
@@ -83,12 +84,18 @@
                     <TextBox Text="{Binding Path=LoginServerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:MainResource.DatabaseName}">
+                <!--<sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:MainResource.DatabaseName}">
                     <TextBox Text="{Binding Path=LoginDatabaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </sf:SfTextInputLayout>
 
                 <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:MainResource.UserName}">
                     <TextBox Text="{Binding Path=LoginUserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </sf:SfTextInputLayout>-->
+
+                <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:MainResource.ApiKey}">
+                    <PasswordBox
+                        controlHelpers:PasswordBoxHelper.Attach="True"
+                        controlHelpers:PasswordBoxHelper.Password="{Binding Path=LoginApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </sf:SfTextInputLayout>
             </StackPanel>
 

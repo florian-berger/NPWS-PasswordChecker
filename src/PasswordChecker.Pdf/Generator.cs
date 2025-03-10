@@ -125,7 +125,8 @@ namespace PasswordChecker.Pdf
             {
                 generalTable.Rows.Add(PdfFileResource.ConnectionInfo, " ");
                 generalTable.Rows.Add($"    {PdfFileResource.CheckServerAddress}", _logonData.ServerAddress);
-                generalTable.Rows.Add($"    {PdfFileResource.CheckDatabaseName}", _logonData.DatabaseName);
+                // TODO: Restore as soon as the DB name is available again
+                // generalTable.Rows.Add($"    {PdfFileResource.CheckDatabaseName}", _logonData.DatabaseName);
                 generalTable.Rows.Add($"    {PdfFileResource.CheckUserName}", _logonData.UserDisplayName ?? _logonData.UserName);
             }
 

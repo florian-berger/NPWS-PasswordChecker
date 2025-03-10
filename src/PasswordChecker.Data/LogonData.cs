@@ -3,7 +3,7 @@
     /// <summary>
     ///     Data that was used for logon
     /// </summary>
-    public class LogonData(string serverAddress, string databaseName, string userName)
+    public class LogonData(string serverAddress, string databaseName = "", string userName = "")
     {
         #region Properties
 
