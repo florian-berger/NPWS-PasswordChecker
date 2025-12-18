@@ -56,7 +56,7 @@ namespace PasswordChecker.UI.ViewModel
                 {
                     Name = "FontAwesome.Sharp",
                     Author = "Awesome Incremented and Contributors",
-                    Version = new Version(6, 3, 0),
+                    Version = new Version(6, 6, 0),
                     Uri = "https://www.nuget.org/packages/FontAwesome.Sharp/6.3.0",
                     LicenseType = "Apache-2.0",
                     LicenseText = GetLicenseTextFromResources("FontAwesomeSharp")
@@ -65,7 +65,7 @@ namespace PasswordChecker.UI.ViewModel
                 {
                     Name = "Microsoft.Extensions.Hosting",
                     Author = "Microsoft",
-                    Version = new Version(3, 1, 8),
+                    Version = new Version(10, 0, 1),
                     Uri = "https://www.nuget.org/packages/Microsoft.Extensions.Hosting/3.1.8",
                     LicenseType = "Apache-2.0",
                     LicenseText = GetLicenseTextFromResources("MicrosoftExtensionsHosting")
@@ -74,7 +74,7 @@ namespace PasswordChecker.UI.ViewModel
                 {
                     Name = "Microsoft.Xaml.Behaviors.Wpf",
                     Author = "Microsoft",
-                    Version = new Version(1, 1, 19),
+                    Version = new Version(1, 1, 135),
                     Uri = "https://github.com/Microsoft/XamlBehaviorsWpf",
                     LicenseType = "MIT",
                     LicenseText = GetLicenseTextFromResources("MicrosoftXamlBehaviorsWpf")
@@ -83,7 +83,7 @@ namespace PasswordChecker.UI.ViewModel
                 {
                     Name = "Newtonsoft.Json",
                     Author = "James Newton-King",
-                    Version = new Version(13, 0, 3),
+                    Version = new Version(13, 0, 4),
                     Uri = "https://www.newtonsoft.com/json",
                     LicenseType = "MIT",
                     LicenseText = GetLicenseTextFromResources("NewtonsoftJson")
@@ -92,7 +92,7 @@ namespace PasswordChecker.UI.ViewModel
                 {
                     Name = "Prism.Core",
                     Author = "Brian Lagunas, Dan Siegel",
-                    Version = new Version(8, 1, 97),
+                    Version = new Version(9, 0, 537),
                     Uri = "https://www.nuget.org/packages/Prism.Core/8.1.97",
                     LicenseType = "MIT",
                     LicenseText = GetLicenseTextFromResources("PrismCore")
