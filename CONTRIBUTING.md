@@ -9,10 +9,10 @@ After obtaining a license, create an environment variable in your users context 
 
 ### Get access to Netwrix Password Secure
 [Netwrix Password Secure](https://passwordsafe.com/) is a enterprise password manager. A SDK is provided for accessing secrets in external projects. To gain access to this SDK and to access your database with it, you must fulfill one of the following requirements:
-1. Have a license of the level **Enterprise Plus** installed on your server
+1. Have a license with the **API module** installed on your server
 2. You're using a database in a MSP environment
 
-If one of the requirements is matching, place the SDK's `.dll` files in the folder `C:\Dev\SDKs\Netwrix Password Secure\9.0.1.30479`.
+If one of the requirements is matching, place the SDK's `.dll` files in the folder `C:\Dev\SDKs\Netwrix Password Secure\9.3.0.33526\CSharp\`.
 
 ## Did you find a bug?
 * **Do not open an issue if the bug ins in the Netwrix Password Secure SDK/API!** Instead, report this to their Support Team.
