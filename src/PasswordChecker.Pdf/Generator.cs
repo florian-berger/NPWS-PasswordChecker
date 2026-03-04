@@ -125,9 +125,12 @@ namespace PasswordChecker.Pdf
             {
                 generalTable.Rows.Add(PdfFileResource.ConnectionInfo, " ");
                 generalTable.Rows.Add($"    {PdfFileResource.CheckServerAddress}", _logonData.ServerAddress);
-                // TODO: Restore as soon as the DB name is available again
-                // generalTable.Rows.Add($"    {PdfFileResource.CheckDatabaseName}", _logonData.DatabaseName);
+                generalTable.Rows.Add($"    {PdfFileResource.CheckDatabaseName}", _logonData.DatabaseName);
                 generalTable.Rows.Add($"    {PdfFileResource.CheckUserName}", _logonData.UserDisplayName ?? _logonData.UserName);
+                generalTable.Rows.Add(PdfFileResource.ApiKeyInfo, " ");
+                generalTable.Rows.Add($"    {PdfFileResource.ApiKeyAccessRights}", _logonData.ApiKeyAccessRights ?? "- unknown -");
+                generalTable.Rows.Add($"    {PdfFileResource.ApiKeyAccessScopes}", _logonData.ApiKeyAccessScopes ?? "");
+                generalTable.Rows.Add($"    {PdfFileResource.ApiKeyExpiration}", _logonData.ApiKeyExpirationDate?.ToString("u"));
             }
 
             var generalGrid = new PdfGrid

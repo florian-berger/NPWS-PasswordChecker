@@ -205,8 +205,10 @@ namespace PasswordChecker.UI.ViewModel
 
                 if (api is { SessionState: PsrSessionState.Connected })
                 {
-                    // TODO: Read database name, as soon as possible
-                    logonData.DatabaseName = string.Empty;
+                    logonData.DatabaseName = api.ApiKeyManager.GetDatabaseName(LoginApiKey);
+                    logonData.ApiKeyAccessRights = string.Join(", ", api.ApiKeyManager.GetAccessRights(LoginApiKey));
+                    logonData.ApiKeyAccessScopes = string.Join(", ", api.ApiKeyManager.GetAccessScopes(LoginApiKey));
+                    logonData.ApiKeyExpirationDate = api.ApiKeyManager.GetExpirationDateUtc(LoginApiKey);
                     logonData.UserName = api.CurrentUser.UserName;
                     logonData.UserDisplayName = api.CurrentUser.DataName();
 
