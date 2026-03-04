@@ -80,7 +80,7 @@ namespace PasswordChecker
             ThrowExceptionIfShouldCancel();
 
             UiThreadHelper.RunOnUiThread(() => _progress.Step = CheckerStep.LoadPasswordsCount);
-            var passwordsCount = await GetNumberOfExistingPasswords();
+            var passwordsCount = await GetNumberOfExistingPasswords().ConfigureAwait(false);
 
             ThrowExceptionIfShouldCancel();
 
@@ -95,14 +95,14 @@ namespace PasswordChecker
                 ThrowExceptionIfShouldCancel();
                 passwordFilter.Page = i;
 
-                var passwordsPage = await GetPasswords(passwordFilter);
+                var passwordsPage = await GetPasswords(passwordFilter).ConfigureAwait(false);
                 passwords.AddRange(passwordsPage);
             }
 
             ThrowExceptionIfShouldCancel();
 
             UiThreadHelper.RunOnUiThread(() => _progress.Step = CheckerStep.CheckPasswords);
-            await AnalyzePasswords(passwords);
+            await AnalyzePasswords(passwords).ConfigureAwait(false);
 
             ThrowExceptionIfShouldCancel();
 
@@ -194,7 +194,7 @@ namespace PasswordChecker
 
                     try
                     {
-                        await AnalyzeField(item, itemIdentifier);
+                        await AnalyzeField(item, itemIdentifier).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -212,7 +212,7 @@ namespace PasswordChecker
 
         private async Task AnalyzeField(PsrContainerItem item, string itemIdentifier)
         {
-            var decryptedValue = await _api.ContainerManager.DecryptContainerItem(item, "Password Checker");
+            var decryptedValue = await _api.ContainerManager.DecryptContainerItem(item, "Password Checker").ConfigureAwait(false);
             if (string.IsNullOrWhiteSpace(decryptedValue))
             {
                 return;
@@ -224,7 +224,7 @@ namespace PasswordChecker
             var hash = Sha1Helper.Hash(decryptedValue);
             _ = AddToKnownPasswords(hash, itemIdentifier);
 
-            var foundInBreaches = await HaveIBeenPwned.CheckPassword(hash, true);
+            var foundInBreaches = await HaveIBeenPwned.CheckPassword(hash, true).ConfigureAwait(false);
             if (foundInBreaches > 0)
             {
                 while (_breachedPasswords.ContainsKey(itemIdentifier))

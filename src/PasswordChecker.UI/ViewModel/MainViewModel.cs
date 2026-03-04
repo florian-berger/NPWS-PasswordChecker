@@ -127,7 +127,8 @@ namespace PasswordChecker.UI.ViewModel
                 return;
             }
 
-            _ = RunAsync();
+            // start the entire workflow on a thread‑pool thread so continuations never capture the UI context
+            _ = Task.Run(() => RunAsync());
         }
 
         private bool CanRun()
@@ -178,12 +179,16 @@ namespace PasswordChecker.UI.ViewModel
             {
                 IsCheckRunning = true;
 
-                await SaveLastUserData();
+                await SaveLastUserData().ConfigureAwait(false);
 
-                CurrentProgress = new CheckerProgress
+                // update progress on UI thread explicitly
+                UiThreadHelper.RunOnUiThread(() =>
                 {
-                    Step = CheckerStep.ConnectAndLogin
-                };
+                    CurrentProgress = new CheckerProgress
+                    {
+                        Step = CheckerStep.ConnectAndLogin
+                    };
+                });
 
                 logonData = new LogonData(LoginServerAddress);
 
@@ -196,7 +201,7 @@ namespace PasswordChecker.UI.ViewModel
                         ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                     }
                 });
-                await api.AuthenticationManagerV2.LoginWithApiKey(LoginApiKey);
+                await api.AuthenticationManagerV2.LoginWithApiKey(LoginApiKey).ConfigureAwait(false);
 
                 if (api is { SessionState: PsrSessionState.Connected })
                 {
@@ -207,18 +212,18 @@ namespace PasswordChecker.UI.ViewModel
 
                     try
                     {
-                        await RunPasswordAnalysis(api);
+                        await RunPasswordAnalysis(api).ConfigureAwait(false);
                     }
                     finally
                     {
-                        CurrentProgress.Step = CheckerStep.Finish;
-                        await api.AuthenticationManagerV2.Logout();
+                        UiThreadHelper.RunOnUiThread(() => CurrentProgress.Step = CheckerStep.Finish);
+                        await api.AuthenticationManagerV2.Logout().ConfigureAwait(false);
                     }
                 }
             }
             catch (Exception ex)
             {
-                CustomMessageBox.ShowErrorDialog(ex);
+                UiThreadHelper.RunOnUiThread(() => CustomMessageBox.ShowErrorDialog(ex));
             }
             finally
             {
@@ -228,7 +233,7 @@ namespace PasswordChecker.UI.ViewModel
 
             if (reportData != null)
             {
-                ShowCheckerReport(reportData, logonData);
+                UiThreadHelper.RunOnUiThread(() => ShowCheckerReport(reportData, logonData));
             }
         }
 
@@ -253,7 +258,7 @@ namespace PasswordChecker.UI.ViewModel
             var checker = new Checker(apiInstance, CurrentProgress, ignoredFields,
                 new ConnectionInfo(LoginServerAddress, apiInstance.CurrentUser.DataName()), _cancelTokenSrc.Token);
 
-            await checker.Run();
+            await checker.Run().ConfigureAwait(false);
         }
 
         private void ResetExecution()
