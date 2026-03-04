@@ -187,4 +187,16 @@
   <data name="ConnectionInfo" xml:space="preserve">
     <value>Verbindungsdaten</value>
   </data>
+  <data name="ApiKeyExpiration" xml:space="preserve">
+    <value>Ablaufdatum (UTC)</value>
+  </data>
+  <data name="ApiKeyInfo" xml:space="preserve">
+    <value>API Key-Informationen</value>
+  </data>
+  <data name="ApiKeyAccessRights" xml:space="preserve">
+    <value>Zugriffsrechte</value>
+  </data>
+  <data name="ApiKeyAccessScopes" xml:space="preserve">
+    <value>Zugriffsbereiche</value>
+  </data>
 </root>

@@ -19,7 +19,7 @@ namespace PasswordChecker.Resources.Language {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PdfFileResource {
@@ -57,6 +57,42 @@ namespace PasswordChecker.Resources.Language {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Access rights.
+        /// </summary>
+        public static string ApiKeyAccessRights {
+            get {
+                return ResourceManager.GetString("ApiKeyAccessRights", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Access scopes.
+        /// </summary>
+        public static string ApiKeyAccessScopes {
+            get {
+                return ResourceManager.GetString("ApiKeyAccessScopes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expiration date (UTC).
+        /// </summary>
+        public static string ApiKeyExpiration {
+            get {
+                return ResourceManager.GetString("ApiKeyExpiration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API key information.
+        /// </summary>
+        public static string ApiKeyInfo {
+            get {
+                return ResourceManager.GetString("ApiKeyInfo", resourceCulture);
             }
         }
         

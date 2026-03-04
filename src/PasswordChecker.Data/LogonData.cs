@@ -27,6 +27,21 @@
         /// </summary>
         public string? UserDisplayName { get; set; }
 
+        /// <summary>
+        ///     Representing the access rights the used API key has (comma separated)
+        /// </summary>
+        public string? ApiKeyAccessRights { get; set; }
+
+        /// <summary>
+        ///     Representing all access scopes the used API key has (comma separated)
+        /// </summary>
+        public string? ApiKeyAccessScopes { get; set; }
+
+        /// <summary>
+        ///     Represents the UTC expiration date of the used API key
+        /// </summary>
+        public DateTime? ApiKeyExpirationDate { get; set; }
+
         #endregion Properties
     }
 }
