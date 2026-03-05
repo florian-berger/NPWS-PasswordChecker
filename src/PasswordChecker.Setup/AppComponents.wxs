@@ -1,0 +1,12 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+    <ComponentGroup Id="AppComponents" Directory="INSTALLFOLDER">
+      <File Source="PasswordChecker.UI.exe" Id="file_passwordCheckerUiExe" />
+      
+      <Files Include="$(var.PasswordChecker.UI.TargetDir)\**">
+        <!--<Exclude Files="*.pdb" />-->
+        <Exclude Files="PasswordChecker.UI.exe" />
+      </Files>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
