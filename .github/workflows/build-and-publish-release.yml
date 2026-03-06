@@ -25,12 +25,37 @@ jobs:
       run: |
         # Remove the leading 'v' from the tag name to get the version
         $version = "${{ github.ref_name }}".Substring(1)
-        Write-Host "::set-output name=buildVersion:: $version"
+        Add-Content -Path $Env:GITHUB_OUTPUT -Value "buildVersion=$version"
 
         $filePath = "src/PasswordChecker.UI/App.xaml.cs"
         $content = Get-Content $filePath
         $newContent = $content.Replace("%LICENSE_KEY%", "${{ secrets.SF_LICENSE_KEY }}")
         Set-Content $filePath $newContent
+      shell: powershell
+
+    - name: 'Download SDK'
+      run: |
+        $url = "${{ secrets.NETWRIX_SDK_URL }}"
+        $outputPath = "${{ runner.temp }}\sdk.zip"
+        Write-Host "Downloading SDK from URL"
+        Invoke-WebRequest -Uri $url -OutFile $outputPath
+        Write-Host "SDK downloaded successfully"
+      shell: powershell
+
+    - name: 'Extract SDK'
+      run: |
+        $zipPath = "${{ runner.temp }}\sdk.zip"
+        $extractPath = "C:\Dev\SDKs\Netwrix Password Secure\9.3.1.33994"
+        
+        # Create the target directory if it doesn't exist
+        if (!(Test-Path $extractPath)) {
+            New-Item -ItemType Directory -Path $extractPath -Force | Out-Null
+        }
+        
+        # Extract the archive to the target directory
+        Write-Host "Extracting SDK to: $extractPath"
+        Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
+        Write-Host "SDK extraction complete"
       shell: powershell
 
     - name: 'Build projects'
