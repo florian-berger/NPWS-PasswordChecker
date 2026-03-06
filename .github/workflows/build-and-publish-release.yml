@@ -69,7 +69,7 @@ jobs:
       run: |
         $version = ${{ steps.prepare_build.outputs.buildVersion }}
 
-        $basePath = "src/PasswordChecker.Setup/bin/x64/Release/"
+        $basePath = "src/PasswordChecker.Setup/bin/Release/"
 
         # Rename the German setup
         $deFile = Get-ChildItem -Path "$basePath/de-DE/" -Filter "*.msi" | Select-Object -First 1
@@ -96,8 +96,7 @@ jobs:
         tag_name: ${{ github.ref_name }}
         name: Version ${{ github.ref_name }}
         files: |
-          src/PasswordChecker.Setup/bin/x64/Release/de-DE/*
-          src/PasswordChecker.Setup/bin/x64/Release/en-US/*
+          src/PasswordChecker.Setup/bin/Release/**/*.msi
         draft: true
         body: |
           ## What's changed
