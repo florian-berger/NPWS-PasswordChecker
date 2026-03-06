@@ -1,0 +1,83 @@
+name: Build setup and release
+
+on:
+  push:
+    tags:
+      - 'v*.*'
+      - 'v*.*.*'
+
+jobs:
+  build-setup:
+    # Windows runner needs to be used for WiX builds
+    runs-on: windows-latest
+
+    steps:
+    - name: 'Checkout repository'
+      uses: actions/checkout@v4
+
+    - name: 'Setup .NET8 SDK'
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0'
+
+    - name: 'Add Syncfusion license to repo'
+      id: prepare_build
+      run: |
+        # Remove the leading 'v' from the tag name to get the version
+        $version = "${{ github.ref_name }}".Substring(1)
+        Write-Host "::set-output name=buildVersion:: $version"
+
+        $filePath = "src/PasswordChecker.UI/App.xaml.cs"
+        $content = Get-Content $filePath
+        $newContent = $content.Replace("%LICENSE_KEY%", "${{ secrets.SF_LICENSE_KEY }}")
+        Set-Content $filePath $newContent
+      shell: powershell
+
+    - name: 'Build projects'
+      run: |
+        $version = ${{ steps.prepare_build.outputs.buildVersion }}
+        & .\UpdateProjectVersion.ps1 -NewVersion $version
+        dotnet build src/PasswordChecker.Setup/PasswordChecker.Setup.wixproj -c Release /p:Version=$version /p:AssemblyVersion=$version /p:FileVersion=$version /p:InformationalVersion=$version
+      shell: powershell
+
+    - name: 'Rename setups'
+      run: |
+        $version = ${{ steps.prepare_build.outputs.buildVersion }}
+
+        $basePath = "src/PasswordChecker.Setup/bin/x64/Release/"
+
+        # Rename the German setup
+        $deFile = Get-ChildItem -Path "$basePath/de-DE/" -Filter "*.msi" | Select-Object -First 1
+        if ($deFile) {
+            $newName = "PasswordChecker-$version-de.msi"
+            $newPath = Join-Path $deFile.DirectoryName $newName
+            Write-Host "Renaming $($deFile.Name) to $newName"
+            Rename-Item -Path $deFile.FullName -NewName $newName
+        }
+
+        # Rename the English setup
+        $enFile = Get-ChildItem -Path "$basePath/en-US/" -Filter "*.msi" | Select-Object -First 1
+        if ($enFile) {
+            $newName = "PasswordChecker-$version-en.msi"
+            $newPath = Join-Path $enFile.DirectoryName $newName
+            Write-Host "Renaming $($enFile.Name) to $newName"
+            Rename-Item -Path $enFile.FullName -NewName $newName
+        }
+      shell: powershell
+
+    - name: 'Create GitHub release as draft'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.ref_name }}
+        name: Version ${{ github.ref_name }}
+        files: |
+          src/PasswordChecker.Setup/bin/x64/Release/de-DE/*
+          src/PasswordChecker.Setup/bin/x64/Release/en-US/*
+        draft: true
+        body: |
+          ## What's changed
+          - Fill the content here
+
+          **Full Changelog**: Insert link here
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

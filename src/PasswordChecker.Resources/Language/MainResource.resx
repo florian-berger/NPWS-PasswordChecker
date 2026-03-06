@@ -142,4 +142,10 @@
   <data name="ApiKey" xml:space="preserve">
     <value>API key</value>
   </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>A new version ({0}) is available. Do you want to download it?</value>
+  </data>
+  <data name="NewVersionTitle" xml:space="preserve">
+    <value>New version available</value>
+  </data>
 </root>

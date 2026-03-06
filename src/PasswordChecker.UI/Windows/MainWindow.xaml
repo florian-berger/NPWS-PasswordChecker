@@ -10,10 +10,12 @@
                  xmlns:lang="clr-namespace:PasswordChecker.Resources.Language;assembly=PasswordChecker.Resources"
                  xmlns:ui="clr-namespace:PasswordChecker.UI"
                  xmlns:controlHelpers="clr-namespace:PasswordChecker.UI.Wpf.ControlHelpers"
+                 xmlns:converters="clr-namespace:PasswordChecker.UI.Wpf.Converters"
                  sf:SfSkinManager.Theme="{sf:SkinManager ThemeName=Windows11Dark}"
                  mc:Ignorable="d" Title="{x:Static lang:MainResource.WindowTitle}" ShowHelpButton="False"
                  Icon="{fa:IconSource Passport, Foreground=White}"
-                 Height="480" Width="600" ResizeMode="NoResize">
+                 Height="480" Width="600" ResizeMode="NoResize"
+                 ContentRendered="MainWindow_OnContentRendered">
     <sf:RibbonWindow.DataContext>
         <viewModel:MainViewModel />
     </sf:RibbonWindow.DataContext>
@@ -21,6 +23,8 @@
     <sf:RibbonWindow.Resources>
         <DataTemplate x:Key="FixTemplateSelector">
         </DataTemplate>
+
+        <converters:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
     </sf:RibbonWindow.Resources>
 
     <DockPanel>
@@ -57,6 +61,13 @@
                                      CommandParameter="{x:Static ui:CheckerConstants.RepositoryUri}" />
 
                     <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Small"
+                                     Visibility="{Binding Path=NewVersionDownloadLink, Mode=OneWay, Converter={StaticResource NotNullToVisibilityConverter}}"
+                                     Label="{x:Static lang:MainResource.NewVersionTitle}"
+                                     SmallIcon="{fa:IconSource Download, Foreground=White}"
+                                     Command="{x:Static wpf:StaticCommands.OpenUriCommand}"
+                                     CommandParameter="{Binding Path=NewVersionDownloadLink, Mode=OneWay}" />
+
+                    <sf:RibbonButton HorizontalAlignment="Left" SizeForm="Small"
                                      Label="{x:Static lang:GlobalResource.ThirdPartyLicenses}"
                                      SmallIcon="{fa:IconSource Stamp, Foreground=White, IconFont=Solid}"
                                      Command="{Binding Path=ShowThirdPartyLicensesCommand, Mode=OneWay}"/>
@@ -83,14 +94,6 @@
                 <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:MainResource.ServerAddress}">
                     <TextBox Text="{Binding Path=LoginServerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </sf:SfTextInputLayout>
-
-                <!--<sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:MainResource.DatabaseName}">
-                    <TextBox Text="{Binding Path=LoginDatabaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </sf:SfTextInputLayout>
-
-                <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:MainResource.UserName}">
-                    <TextBox Text="{Binding Path=LoginUserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </sf:SfTextInputLayout>-->
 
                 <sf:SfTextInputLayout ContainerType="Filled" Hint="{x:Static lang:MainResource.ApiKey}">
                     <PasswordBox

@@ -1,16 +1,19 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using PasswordChecker.Data;
+﻿using PasswordChecker.Data;
 using PasswordChecker.Shared.Configuration;
 using PasswordChecker.Shared.Helpers;
+using PasswordChecker.UI.Enums;
 using PasswordChecker.UI.Helpers;
 using PasswordChecker.UI.Windows;
+using PasswordChecker.UI.Wpf;
 using Prism.Commands;
 using Prism.Mvvm;
 using PsrApi;
 using PsrApi.Data;
+using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using PasswordChecker.Resources.Language;
 
 namespace PasswordChecker.UI.ViewModel
 {
@@ -75,6 +78,12 @@ namespace PasswordChecker.UI.ViewModel
             private set => SetProperty(ref _currentProgress, value);
         } private CheckerProgress? _currentProgress;
 
+        public string? NewVersionDownloadLink
+        {
+            get => _newVersionDownloadLink;
+            set => SetProperty(ref _newVersionDownloadLink, value);
+        } private string? _newVersionDownloadLink;
+
         #endregion Properties
 
         #region Constructor
@@ -116,6 +125,45 @@ namespace PasswordChecker.UI.ViewModel
         private DelegateCommand? _showThirdPartyLicensesCommand;
 
         #endregion Commands
+
+        #region Internal methods
+
+        internal async Task CheckForVersionUpdate()
+        {
+            var currentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            if (currentVersion == null)
+            {
+                return;
+            }
+
+            try
+            {
+                var newestVersion = await VersionHelper.CheckForUpdate(currentVersion);
+                if (newestVersion != null)
+                {
+                    UiThreadHelper.RunOnUiThread(() =>
+                    {
+                        NewVersionDownloadLink = newestVersion.Value.ReleaseLink;
+                        var versionString = VersionHelper.GetVersionString(newestVersion.Value.Version);
+
+                        var result = CustomMessageBox.ShowDialog(
+                            string.Format(MainResource.NewVersionAvailable, versionString),
+                            MainResource.NewVersionTitle, CustomMessageBoxButtons.YesNo, CustomMessageBoxImage.Question);
+
+                        if (result == CustomMessageBoxResult.Yes)
+                        {
+                            StaticCommands.OpenUriCommand.Execute(NewVersionDownloadLink);
+                        }
+                    });
+                }
+            }
+            catch (Exception)
+            {
+                // Version check failed - do nothing
+            }
+        }
+
+        #endregion Internal methods
 
         #region Private methods
 
