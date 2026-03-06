@@ -25,7 +25,7 @@ jobs:
       run: |
         # Remove the leading 'v' from the tag name to get the version
         $version = "${{ github.ref_name }}".Substring(1)
-        Write-Host "::set-output name=buildVersion:: $version"
+        Add-Content -Path $Env:GITHUB_OUTPUT -Value "buildVersion=$version"
 
         $filePath = "src/PasswordChecker.UI/App.xaml.cs"
         $content = Get-Content $filePath
