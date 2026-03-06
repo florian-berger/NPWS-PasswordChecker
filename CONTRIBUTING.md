@@ -12,7 +12,7 @@ After obtaining a license, create an environment variable in your users context 
 1. Have a license with the **API module** installed on your server
 2. You're using a database in a MSP environment
 
-If one of the requirements is matching, place the SDK's `.dll` files in the folder `C:\Dev\SDKs\Netwrix Password Secure\9.3.0.33526\CSharp\`.
+If one of the requirements is matching, place the SDK's `.dll` files in the folder `~\_npws-sdk\CSharp\`.
 
 ## Did you find a bug?
 * **Do not open an issue if the bug ins in the Netwrix Password Secure SDK/API!** Instead, report this to their Support Team.
