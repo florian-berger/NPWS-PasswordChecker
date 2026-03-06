@@ -45,7 +45,7 @@ jobs:
     - name: 'Extract SDK'
       run: |
         $zipPath = "${{ runner.temp }}\sdk.zip"
-        $extractPath = "C:\Dev\SDKs\Netwrix Password Secure\9.3.1.33994"
+        $extractPath = "${{ github.workspace }}\_npws-sdk"
         
         # Create the target directory if it doesn't exist
         if (!(Test-Path $extractPath)) {
