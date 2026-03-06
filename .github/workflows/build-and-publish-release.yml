@@ -10,6 +10,8 @@ jobs:
   build-setup:
     # Windows runner needs to be used for WiX builds
     runs-on: windows-latest
+    permissions:
+      contents: write
 
     steps:
     - name: 'Checkout repository'
